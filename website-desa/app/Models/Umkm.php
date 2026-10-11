@@ -2,9 +2,25 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Umkm extends Model
 {
-    protected $guarded = ['id'];
+    use HasFactory;
+
+    protected $fillable = [
+        'nama_umkm',
+        'pemilik',
+        'kategori',
+        'deskripsi',
+        'whatsapp',
+        'produk',
+        'alamat',
+        'telepon',
+        'instagram',
+        'google_maps_url',
+        'gambar',
+        'is_featured',
+    ];
 }

@@ -4,62 +4,105 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Umkm;
-use App\Models\VillageProfile; // Tambahan untuk ambil profil desa
+use App\Models\VillageProfile;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
-use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Storage; // <--- WAJIB TAMBAH INI
 
 class UmkmController extends Controller
 {
     public function index()
     {
-        $umkm = Umkm::latest()->get();
-        return Inertia::render('Admin/Umkm/Index', [
-            'umkm' => $umkm
-        ]);
+        return Inertia::render('Admin/UMKM/Index', ['umkm' => Umkm::latest()->get()]);
     }
 
-    // --- TAMBAHAN UNTUK HALAMAN PUBLIK DIREKTORI UMKM ---
     public function publicIndex()
     {
-        $umkm = Umkm::latest()->get();
-        $profil = VillageProfile::first();
-
         return Inertia::render('UmkmIndex', [
-            'umkm' => $umkm,
-            'profil' => $profil
+            'umkm' => Umkm::latest()->get(),
+            'profil' => VillageProfile::first()
         ]);
     }
-    // --------------------------------------------------
 
     public function create()
     {
-        return Inertia::render('Admin/Umkm/Create');
+        return Inertia::render('Admin/UMKM/Create');
     }
 
     public function store(Request $request)
     {
         $request->validate([
-            'nama' => 'required|string|max:255',
+            'nama_umkm' => 'required|string|max:255',
             'pemilik' => 'required|string|max:255',
             'deskripsi' => 'required',
-            'nomor_wa' => 'nullable|string|max:20'
+            'whatsapp' => 'nullable|string|max:20',
+            'gambar' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:10240' // Validasi foto (maks 2MB)
         ]);
 
+        $gambarPath = null;
+        if ($request->hasFile('gambar')) {
+            $gambarPath = $request->file('gambar')->store('umkm_photos', 'public');
+        }
+
         Umkm::create([
-            'nama' => $request->nama,
-            'slug' => Str::slug($request->nama),
+            'nama_umkm' => $request->nama_umkm,
             'pemilik' => $request->pemilik,
             'deskripsi' => $request->deskripsi,
-            'nomor_wa' => $request->nomor_wa,
-            'status' => 'aktif'
+            'whatsapp' => $request->whatsapp,
+            'gambar' => $gambarPath,
         ]);
 
         return redirect()->route('admin.umkm.index')->with('message', 'Data UMKM berhasil ditambahkan!');
     }
 
-    public function destroy(Umkm $umkm)
+    public function edit($id)
     {
+        return Inertia::render('Admin/UMKM/Edit', ['umkm' => Umkm::findOrFail($id)]);
+    }
+
+    public function update(Request $request, $id)
+    {
+        $umkm = Umkm::findOrFail($id);
+
+        $request->validate([
+            'nama_umkm' => 'required|string|max:255',
+            'pemilik' => 'required|string|max:255',
+            'deskripsi' => 'required',
+            'whatsapp' => 'nullable|string|max:20',
+            'gambar' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:10240'
+        ]);
+
+        $gambarPath = $umkm->gambar; // Default pakai gambar lama
+
+        if ($request->hasFile('gambar')) {
+            // Hapus gambar lama jika ada
+            if ($umkm->gambar && Storage::disk('public')->exists($umkm->gambar)) {
+                Storage::disk('public')->delete($umkm->gambar);
+            }
+            // Simpan gambar baru
+            $gambarPath = $request->file('gambar')->store('umkm_photos', 'public');
+        }
+
+        $umkm->update([
+            'nama_umkm' => $request->nama_umkm,
+            'pemilik' => $request->pemilik,
+            'deskripsi' => $request->deskripsi,
+            'whatsapp' => $request->whatsapp,
+            'gambar' => $gambarPath,
+        ]);
+
+        return redirect()->route('admin.umkm.index')->with('message', 'Data UMKM berhasil diperbarui!');
+    }
+
+    public function destroy($id)
+    {
+        $umkm = Umkm::findOrFail($id);
+        
+        // Hapus file fisik gambarnya
+        if ($umkm->gambar && Storage::disk('public')->exists($umkm->gambar)) {
+            Storage::disk('public')->delete($umkm->gambar);
+        }
+
         $umkm->delete();
         return redirect()->route('admin.umkm.index')->with('message', 'Data UMKM berhasil dihapus!');
     }

@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 use App\Models\VillageProfile;
 use App\Models\News;
+use App\Http\Controllers\Admin\UmkmController;
 
 // ==============================================================
 // 1. HALAMAN PUBLIK (Beranda Utama)
@@ -71,6 +72,9 @@ Route::middleware(['auth', 'verified'])->prefix('admin')->name('admin.')->group(
     Route::resource('/umkm', \App\Http\Controllers\Admin\UmkmController::class);
     Route::resource('/profil', \App\Http\Controllers\Admin\ProfilController::class);
 });
+
+
+Route::get('/umkm', [App\Http\Controllers\Admin\UmkmController::class, 'publicIndex'])->name('umkm.index');
 
 
 // Bawaan sistem login Laravel

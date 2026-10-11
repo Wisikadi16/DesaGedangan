@@ -84,7 +84,7 @@ export default function UmkmIndex({ profil, umkm, auth }) {
                     </div>
                 </nav>
 
-                {/* Header Banner (Diberi margin-top agar tidak tertutup navbar fixed) */}
+                {/* Header Banner */}
                 <div className="bg-gradient-to-r from-green-800 to-teal-700 text-white text-center py-20 px-4 mt-16">
                     <h2 className="text-4xl font-extrabold mb-3">Direktori UMKM & Produk Warga</h2>
                     <p className="text-green-100 max-w-2xl mx-auto text-lg">
@@ -98,22 +98,33 @@ export default function UmkmIndex({ profil, umkm, auth }) {
                         {umkm && umkm.length > 0 ? (
                             umkm.map((item) => (
                                 <div key={item.id} className="bg-white rounded-2xl shadow-md overflow-hidden border border-gray-200 flex flex-col hover:shadow-xl transition duration-300">
-                                    <div className="h-44 bg-green-600 flex items-center justify-center text-white text-3xl font-bold relative">
-                                        <span>🏪 {item.nama?.charAt(0) || 'U'}</span>
+                                    
+                                    {/* Render Gambar UMKM jika ada, jika tidak pakai placeholder */}
+                                    <div className="h-44 bg-green-600 flex items-center justify-center text-white text-3xl font-bold relative overflow-hidden">
+                                        {item.gambar ? (
+                                            <img 
+                                                src={`/storage/${item.gambar}`} 
+                                                alt={item.nama_umkm} 
+                                                className="w-full h-full object-cover" 
+                                            />
+                                        ) : (
+                                            <span>🏪 {item.nama_umkm?.charAt(0) || 'U'}</span>
+                                        )}
                                     </div>
+
                                     <div className="p-6 flex-grow flex flex-col justify-between">
                                         <div>
-                                            <h4 className="font-bold text-xl text-gray-900 mb-1">{item.nama}</h4>
+                                            <h4 className="font-bold text-xl text-gray-900 mb-1">{item.nama_umkm}</h4>
                                             <p className="text-sm text-gray-500 mb-2 font-medium">👤 Pemilik: {item.pemilik}</p>
                                             <p className="text-sm text-gray-600 mb-4 line-clamp-3">{item.deskripsi}</p>
                                         </div>
                                         <div className="pt-4 border-t border-gray-100 flex items-center justify-between">
                                             <span className="text-xs font-bold text-gray-700 bg-gray-100 px-2.5 py-1 rounded">
-                                                📞 {item.nomor_wa || '-'}
+                                                📞 {item.whatsapp || '-'}
                                             </span>
-                                            {item.nomor_wa && (
+                                            {item.whatsapp && (
                                                 <a 
-                                                    href={`https://wa.me/${item.nomor_wa}`} 
+                                                    href={`https://wa.me/${item.whatsapp}`} 
                                                     target="_blank" 
                                                     rel="noopener noreferrer" 
                                                     className="bg-green-600 text-white text-xs px-4 py-2 rounded-xl font-bold hover:bg-green-700 transition shadow-sm"
