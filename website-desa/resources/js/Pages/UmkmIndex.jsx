@@ -1,85 +1,46 @@
 import { Head, Link } from '@inertiajs/react';
+import { useState } from 'react';
 
 export default function UmkmIndex({ profil, umkm, auth }) {
+    const [search, setSearch] = useState('');
+    const [selectedCategory, setSelectedCategory] = useState('Semua');
+
+    // Filter pencarian berdasarkan nama usaha atau produk, serta kategori
+    const filteredUmkm = umkm.filter((item) => {
+        const matchesSearch = item.nama_umkm?.toLowerCase().includes(search.toLowerCase()) ||
+                              (item.produk && item.produk.toLowerCase().includes(search.toLowerCase())) ||
+                              (item.pemilik && item.pemilik.toLowerCase().includes(search.toLowerCase()));
+        
+        const matchesCategory = selectedCategory === 'Semua' || item.kategori === selectedCategory;
+        return matchesSearch && matchesCategory;
+    });
+
+    const categories = ['Semua', 'Kuliner', 'Kerajinan', 'Jasa', 'Pertanian'];
+
     return (
         <>
             <Head title={`Direktori UMKM - ${profil?.nama_desa || 'Desa Gedangan'}`} />
             <div className="min-h-screen bg-gray-50 text-gray-800 font-sans flex flex-col justify-between">
                 
-                {/* Navbar Seragam (Sama persis seperti halaman Welcome) */}
+                {/* Navbar */}
                 <nav className="bg-white shadow-md w-full fixed top-0 z-50 h-16">
                     <div className="w-full px-6 lg:px-12 flex justify-between items-center h-full">
-                        
-                        {/* 1. Logo */}
                         <Link href={route('home')} className="font-extrabold text-2xl text-green-700 tracking-wider">
                             {profil?.nama_desa || 'DESA'}
                         </Link>
-
-                        {/* 2. Container Menu & Login */}
                         <div className="flex items-center space-x-8 h-full">
-                            
-                            {/* Menu Navigasi Desktop */}
                             <ul className="hidden lg:flex space-x-6 font-bold text-sm text-gray-700 h-full">
                                 <li className="h-full flex items-center"><Link href={route('home')} className="hover:text-green-600 transition">Beranda</Link></li>
-                                
-                                {/* Dropdown Profil */}
-                                <li className="relative group h-full flex items-center">
-                                    <span className="cursor-pointer hover:text-green-600 transition h-full flex items-center">Profil ▾</span>
-                                    <ul className="absolute top-full left-0 w-48 bg-white border-t-2 border-green-600 shadow-xl hidden group-hover:block">
-                                        <li><Link href={route('profil.desa')} className="block px-4 py-3 hover:bg-green-50 hover:text-green-700 border-b text-sm">Profil Desa</Link></li>
-                                        <li><Link href={route('profil.pemerintahan')} className="block px-4 py-3 hover:bg-green-50 hover:text-green-700 border-b text-sm">Pemerintahan</Link></li>
-                                        <li><Link href={route('profil.kondisi')} className="block px-4 py-3 hover:bg-green-50 hover:text-green-700 border-b text-sm">Kondisi Umum</Link></li>
-                                        <li><Link href={route('profil.penduduk')} className="block px-4 py-3 hover:bg-green-50 hover:text-green-700 border-b text-sm">Profil Penduduk</Link></li>
-                                        <li><Link href={route('profil.masalah')} className="block px-4 py-3 hover:bg-green-50 hover:text-green-700 border-b text-sm">Potensi & Masalah</Link></li>
-                                        <li><Link href={route('profil.dusun')} className="block px-4 py-3 hover:bg-green-50 hover:text-green-700 text-sm">Dusun</Link></li>
-                                    </ul>
-                                </li>
-
-                                <li className="h-full flex items-center"><Link href={route('berita')} className="hover:text-green-600 transition">Berita</Link></li>
                                 <li className="h-full flex items-center"><Link href={route('umkm.index')} className="text-green-600 transition">UMKM Warga</Link></li>
-                                <li className="h-full flex items-center"><Link href={route('wisata')} className="hover:text-green-600 transition">Desa Wisata</Link></li>
-
-                                {/* Dropdown Potensi */}
-                                <li className="relative group h-full flex items-center">
-                                    <span className="cursor-pointer hover:text-green-600 transition h-full flex items-center">Potensi ▾</span>
-                                    <ul className="absolute top-full left-0 w-48 bg-white border-t-2 border-green-600 shadow-xl hidden group-hover:block">
-                                        <li><Link href={route('potensi.pariwisata')} className="block px-4 py-3 hover:bg-green-50 hover:text-green-700 border-b text-sm">Pariwisata</Link></li>
-                                        <li><Link href={route('potensi.pasar')} className="block px-4 py-3 hover:bg-green-50 hover:text-green-700 border-b text-sm">Pasar Desa</Link></li>
-                                        <li><Link href={route('potensi.kesenian')} className="block px-4 py-3 hover:bg-green-50 hover:text-green-700 text-sm">Kesenian</Link></li>
-                                    </ul>
-                                </li>
-
-                                {/* Dropdown Transparansi */}
-                                <li className="relative group h-full flex items-center">
-                                    <span className="cursor-pointer hover:text-green-600 transition h-full flex items-center">Transparansi ▾</span>
-                                    <ul className="absolute top-full left-0 w-48 bg-white border-t-2 border-green-600 shadow-xl hidden group-hover:block">
-                                        <li><Link href={route('transparansi.apbdes')} className="block px-4 py-3 hover:bg-green-50 hover:text-green-700 border-b text-sm">APBDes</Link></li>
-                                        <li><Link href={route('transparansi.realisasi')} className="block px-4 py-3 hover:bg-green-50 hover:text-green-700 text-sm">Realisasi Anggaran</Link></li>
-                                    </ul>
-                                </li>
-
-                                {/* Dropdown Desa Online */}
-                                <li className="relative group h-full flex items-center">
-                                    <span className="cursor-pointer hover:text-green-600 transition h-full flex items-center">Desa Online ▾</span>
-                                    <ul className="absolute top-full left-0 w-48 bg-white border-t-2 border-green-600 shadow-xl hidden group-hover:block">
-                                        <li><Link href={route('online.syarat')} className="block px-4 py-3 hover:bg-green-50 hover:text-green-700 border-b text-sm">Syarat Pelayanan</Link></li>
-                                        <li><Link href={route('online.smard')} className="block px-4 py-3 hover:bg-green-50 hover:text-green-700 text-sm">Layanan SMARD</Link></li>
-                                    </ul>
-                                </li>
-
                                 <li className="h-full flex items-center"><Link href={route('buku-tamu')} className="hover:text-green-600 transition">Buku Tamu</Link></li>
-                                <li className="h-full flex items-center"><Link href={route('kontak')} className="hover:text-green-600 transition">Kontak</Link></li>
                             </ul>
-
-                            {/* Tombol Login / Admin */}
-                            <div className="h-full flex items-center">
+                            <div>
                                 {auth?.user ? (
                                     <Link href={route('admin.dashboard')} className="px-5 py-2 bg-green-600 text-white text-sm rounded-md font-bold hover:bg-green-700 transition shadow-sm">Panel Admin</Link>
                                 ) : (
                                     <Link href={route('login')} className="px-5 py-2 bg-gray-800 text-white text-sm rounded-md font-bold hover:bg-gray-900 transition shadow-sm">Login</Link>
                                 )}
                             </div>
-                            
                         </div>
                     </div>
                 </nav>
@@ -92,15 +53,46 @@ export default function UmkmIndex({ profil, umkm, auth }) {
                     </p>
                 </div>
 
+                {/* Filter & Search Section */}
+                <div className="max-w-7xl mx-auto px-4 mt-10 w-full flex flex-col md:flex-row justify-between items-center gap-4">
+                    {/* Search Bar */}
+                    <div className="w-full md:w-1/3">
+                        <input 
+                            type="text" 
+                            placeholder="🔍 Cari nama usaha, pemilik, atau produk..." 
+                            value={search}
+                            onChange={(e) => setSearch(e.target.value)}
+                            className="w-full border-gray-300 rounded-xl shadow-sm focus:ring-green-500 focus:border-green-500 px-4 py-3 text-sm"
+                        />
+                    </div>
+
+                    {/* Category Filter Tabs */}
+                    <div className="flex flex-wrap gap-2 justify-center">
+                        {categories.map((cat) => (
+                            <button
+                                key={cat}
+                                onClick={() => setSelectedCategory(cat)}
+                                className={`px-4 py-2 rounded-xl text-sm font-bold transition shadow-sm ${
+                                    selectedCategory === cat 
+                                        ? 'bg-green-600 text-white' 
+                                        : 'bg-white text-gray-700 border border-gray-200 hover:bg-gray-100'
+                                }`}
+                            >
+                                {cat}
+                            </button>
+                        ))}
+                    </div>
+                </div>
+
                 {/* Konten Daftar UMKM */}
-                <div className="max-w-7xl mx-auto py-12 px-4 flex-grow w-full">
+                <div className="max-w-7xl mx-auto py-8 px-4 flex-grow w-full">
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-                        {umkm && umkm.length > 0 ? (
-                            umkm.map((item) => (
+                        {filteredUmkm.length > 0 ? (
+                            filteredUmkm.map((item) => (
                                 <div key={item.id} className="bg-white rounded-2xl shadow-md overflow-hidden border border-gray-200 flex flex-col hover:shadow-xl transition duration-300">
                                     
-                                    {/* Render Gambar UMKM jika ada, jika tidak pakai placeholder */}
-                                    <div className="h-44 bg-green-600 flex items-center justify-center text-white text-3xl font-bold relative overflow-hidden">
+                                    {/* Render Gambar UMKM & Badge Kategori */}
+                                    <div className="h-48 bg-green-600 flex items-center justify-center text-white text-3xl font-bold relative overflow-hidden">
                                         {item.gambar ? (
                                             <img 
                                                 src={`/storage/${item.gambar}`} 
@@ -110,35 +102,74 @@ export default function UmkmIndex({ profil, umkm, auth }) {
                                         ) : (
                                             <span>🏪 {item.nama_umkm?.charAt(0) || 'U'}</span>
                                         )}
+                                        {item.kategori && (
+                                            <span className="absolute top-3 right-3 bg-black/60 backdrop-blur-md text-white text-xs px-3 py-1 rounded-full font-medium">
+                                                {item.kategori}
+                                            </span>
+                                        )}
                                     </div>
 
                                     <div className="p-6 flex-grow flex flex-col justify-between">
                                         <div>
                                             <h4 className="font-bold text-xl text-gray-900 mb-1">{item.nama_umkm}</h4>
-                                            <p className="text-sm text-gray-500 mb-2 font-medium">👤 Pemilik: {item.pemilik}</p>
+                                            <p className="text-sm text-gray-500 mb-1 font-medium">👤 Pemilik: {item.pemilik}</p>
+                                            {item.alamat && <p className="text-xs text-gray-500 mb-2">📍 {item.alamat}</p>}
+                                            {item.produk && (
+                                                <p className="text-xs font-semibold text-green-700 bg-green-50 px-2.5 py-1 rounded-md mb-3 inline-block">
+                                                    🛍️ Produk: {item.produk}
+                                                </p>
+                                            )}
                                             <p className="text-sm text-gray-600 mb-4 line-clamp-3">{item.deskripsi}</p>
                                         </div>
-                                        <div className="pt-4 border-t border-gray-100 flex items-center justify-between">
-                                            <span className="text-xs font-bold text-gray-700 bg-gray-100 px-2.5 py-1 rounded">
-                                                📞 {item.whatsapp || '-'}
-                                            </span>
-                                            {item.whatsapp && (
+
+                                        <div className="pt-4 border-t border-gray-100 space-y-3">
+                                            <div className="flex items-center justify-between text-xs">
+                                                <span className="font-bold text-gray-700 bg-gray-100 px-2.5 py-1 rounded">
+                                                    📞 {item.whatsapp || '-'}
+                                                </span>
+                                                {/* Tombol Google Maps */}
+                                                {item.google_maps_url ? (
+                                                    <a 
+                                                        href={item.google_maps_url} 
+                                                        target="_blank" 
+                                                        rel="noopener noreferrer" 
+                                                        className="text-blue-600 hover:underline font-bold flex items-center gap-1"
+                                                    >
+                                                        🗺️ Lihat Lokasi
+                                                    </a>
+                                                ) : (
+                                                    <span className="text-gray-400 italic">Maps tidak tersedia</span>
+                                                )}
+                                            </div>
+
+                                            <div className="flex gap-2">
+                                                {item.whatsapp && (
+                                                    <a 
+                                                        href={`https://wa.me/${item.whatsapp}?text=Halo%20${encodeURIComponent(item.nama_umkm)},%20saya%20melihat%20informasi%20usaha%20Anda%20di%20Website%20Desa%20Gedangan.`} 
+                                                        target="_blank" 
+                                                        rel="noopener noreferrer" 
+                                                        className="flex-1 bg-green-600 text-white text-xs py-2.5 rounded-xl font-bold text-center hover:bg-green-700 transition shadow-sm"
+                                                    >
+                                                        💬 Chat WhatsApp
+                                                    </a>
+                                                )}
                                                 <a 
-                                                    href={`https://wa.me/${item.whatsapp}`} 
+                                                    href={`https://api.whatsapp.com/send?text=${encodeURIComponent(`Rekomendasi UMKM Desa Gedangan:\n*${item.nama_umkm}* (${item.kategori || 'UMKM'})\nPemilik: ${item.pemilik}\n\n${item.deskripsi}\n\nYuk dukung produk warga lokal!`)}`}
                                                     target="_blank" 
                                                     rel="noopener noreferrer" 
-                                                    className="bg-green-600 text-white text-xs px-4 py-2 rounded-xl font-bold hover:bg-green-700 transition shadow-sm"
+                                                    className="bg-gray-100 text-gray-700 px-3 py-2.5 rounded-xl text-xs font-bold hover:bg-gray-200 transition"
+                                                    title="Bagikan ke WhatsApp"
                                                 >
-                                                    Chat WhatsApp
+                                                    🔗 Bagikan
                                                 </a>
-                                            )}
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
                             ))
                         ) : (
                             <div className="col-span-3 text-center py-20 bg-white rounded-2xl border border-dashed border-gray-300">
-                                <p className="text-gray-500 text-lg italic">Belum ada data UMKM yang terdaftar saat ini.</p>
+                                <p className="text-gray-500 text-lg italic">Tidak ada UMKM yang sesuai dengan pencarian atau kategori tersebut.</p>
                             </div>
                         )}
                     </div>

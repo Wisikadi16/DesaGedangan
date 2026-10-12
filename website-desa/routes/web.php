@@ -6,6 +6,7 @@ use Inertia\Inertia;
 use App\Models\VillageProfile;
 use App\Models\News;
 use App\Http\Controllers\Admin\UmkmController;
+use App\Http\Controllers\Admin\BeritaController;
 
 // ==============================================================
 // 1. HALAMAN PUBLIK (Beranda Utama)
@@ -13,23 +14,29 @@ use App\Http\Controllers\Admin\UmkmController;
 Route::get('/', function () {
     return Inertia::render('Welcome', [
         'profil' => VillageProfile::first(),
-        'berita' => News::with('category')->latest()->take(3)->get() // Ambil 3 berita terbaru
+        'berita' => News::with('category')->latest('tanggal')->take(3)->get() // Ambil 3 berita terbaru
     ]);
 })->name('home');
 
 // ==============================================================
-// 2. RUTE HALAMAN KOSONGAN (Sesuai Navbar)
+// 2. RUTE HALAMAN KOSONGAN & PUBLIK LAINNYA (Sesuai Navbar)
 // ==============================================================
 // Profil
-Route::get('/profil/desa', fn() => Inertia::render('Blank', ['title' => 'Profil Desa']))->name('profil.desa');
+Route::get('/profil/desa', function () {
+    return Inertia::render('ProfilDesa', [
+        'profil' => VillageProfile::first()
+    ]);
+})->name('profil.desa');
+
 Route::get('/profil/pemerintahan', fn() => Inertia::render('Blank', ['title' => 'Pemerintahan']))->name('profil.pemerintahan');
 Route::get('/profil/kondisi-umum', fn() => Inertia::render('Blank', ['title' => 'Kondisi Umum']))->name('profil.kondisi');
 Route::get('/profil/penduduk', fn() => Inertia::render('Blank', ['title' => 'Profil Penduduk']))->name('profil.penduduk');
 Route::get('/profil/potensi-masalah', fn() => Inertia::render('Blank', ['title' => 'Potensi dan Masalah']))->name('profil.masalah');
 Route::get('/profil/dusun', fn() => Inertia::render('Blank', ['title' => 'Data 7 Dusun (Bandungan, Jaten, Bendo, dll)']))->name('profil.dusun');
 
-// Berita & Wisata
-Route::get('/berita', fn() => Inertia::render('Blank', ['title' => 'Arsip Berita & Transparansi']))->name('berita');
+// Berita & Wisata (Publik Berita)
+Route::get('/berita', [BeritaController::class, 'publicIndex'])->name('berita');
+Route::get('/berita/{id}', [BeritaController::class, 'show'])->name('berita.show');
 Route::get('/desa-wisata', fn() => Inertia::render('Blank', ['title' => 'Desa Wisata & Peta Wisata']))->name('wisata');
 
 // Potensi
@@ -49,8 +56,8 @@ Route::get('/desa-online/smard', fn() => Inertia::render('Blank', ['title' => 'L
 Route::get('/buku-tamu', fn() => Inertia::render('Blank', ['title' => 'Buku Tamu']))->name('buku-tamu');
 Route::get('/kontak', fn() => Inertia::render('Blank', ['title' => 'Kontak Kami']))->name('kontak');
 
-//UMKM
-Route::get('/umkm', [\App\Http\Controllers\Admin\UmkmController::class, 'publicIndex'])->name('umkm.index');
+// UMKM Publik
+Route::get('/umkm', [UmkmController::class, 'publicIndex'])->name('umkm.index');
 
 // ==============================================================
 // 3. HALAMAN ADMIN (Khusus Perangkat Desa, Wajib Login)
@@ -60,22 +67,18 @@ Route::middleware(['auth', 'verified'])->prefix('admin')->name('admin.')->group(
         return Inertia::render('Dashboard');
     })->name('dashboard');
 
-    // Rute Manual Berita (Urutan aman: Statis di atas, Dinamis {id} di bawah)
-    Route::get('/berita', [App\Http\Controllers\Admin\BeritaController::class, 'index'])->name('berita.index');
-    Route::get('/berita/tambah', [App\Http\Controllers\Admin\BeritaController::class, 'create'])->name('berita.create');
-    Route::post('/berita', [App\Http\Controllers\Admin\BeritaController::class, 'store'])->name('berita.store');
-    Route::get('/berita/{id}/edit', [App\Http\Controllers\Admin\BeritaController::class, 'edit'])->name('berita.edit');
-    Route::put('/berita/{id}', [App\Http\Controllers\Admin\BeritaController::class, 'update'])->name('berita.update');
-    Route::delete('/berita/{id}', [App\Http\Controllers\Admin\BeritaController::class, 'destroy'])->name('berita.destroy');
+    // Rute Manual Berita Admin
+    Route::get('/berita', [BeritaController::class, 'index'])->name('berita.index');
+    Route::get('/berita/tambah', [BeritaController::class, 'create'])->name('berita.create');
+    Route::post('/berita', [BeritaController::class, 'store'])->name('berita.store');
+    Route::get('/berita/{id}/edit', [BeritaController::class, 'edit'])->name('berita.edit');
+    Route::put('/berita/{id}', [BeritaController::class, 'update'])->name('berita.update');
+    Route::delete('/berita/{id}', [BeritaController::class, 'destroy'])->name('berita.destroy');
 
-    // Resource lain tetap aman
-    Route::resource('/umkm', \App\Http\Controllers\Admin\UmkmController::class);
+    // Resource UMKM & Profil
+    Route::resource('/umkm', UmkmController::class);
     Route::resource('/profil', \App\Http\Controllers\Admin\ProfilController::class);
 });
-
-
-Route::get('/umkm', [App\Http\Controllers\Admin\UmkmController::class, 'publicIndex'])->name('umkm.index');
-
 
 // Bawaan sistem login Laravel
 Route::middleware('auth')->group(function () {

@@ -5,9 +5,13 @@ export default function Create() {
     const { data, setData, post, processing, errors } = useForm({
         nama_umkm: '',
         pemilik: '',
+        kategori: '',
         whatsapp: '',
         deskripsi: '',
-        gambar: null // State untuk foto
+        produk: '',
+        alamat: '',
+        google_maps_url: '',
+        gambar: null
     });
 
     const submit = (e) => {
@@ -52,6 +56,37 @@ export default function Create() {
                                     <input type="text" value={data.whatsapp} onChange={e => setData('whatsapp', e.target.value)} className="w-full border-gray-300 rounded shadow-sm focus:ring-green-500 focus:border-green-500" />
                                     {errors.whatsapp && <div className="text-red-500 text-sm mt-1">{errors.whatsapp}</div>}
                                 </div>
+                            </div>
+
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div>
+                                    <label className="block font-bold mb-1 text-gray-700">Kategori Usaha</label>
+                                    <select value={data.kategori} onChange={e => setData('kategori', e.target.value)} className="w-full border-gray-300 rounded shadow-sm focus:ring-green-500 focus:border-green-500">
+                                        <option value="">Pilih Kategori</option>
+                                        <option value="Kuliner">Kuliner</option>
+                                        <option value="Kerajinan">Kerajinan / Handicraft</option>
+                                        <option value="Jasa">Jasa</option>
+                                        <option value="Pertanian">Pertanian / Peternakan</option>
+                                    </select>
+                                    {errors.kategori && <div className="text-red-500 text-sm mt-1">{errors.kategori}</div>}
+                                </div>
+                                <div>
+                                    <label className="block font-bold mb-1 text-gray-700">Alamat / Dusun</label>
+                                    <input type="text" value={data.alamat} onChange={e => setData('alamat', e.target.value)} className="w-full border-gray-300 rounded shadow-sm focus:ring-green-500 focus:border-green-500" placeholder="Contoh: Dusun Gedangan" />
+                                    {errors.alamat && <div className="text-red-500 text-sm mt-1">{errors.alamat}</div>}
+                                </div>
+                            </div>
+
+                            <div>
+                                <label className="block font-bold mb-1 text-gray-700">Produk Unggulan</label>
+                                <input type="text" value={data.produk} onChange={e => setData('produk', e.target.value)} className="w-full border-gray-300 rounded shadow-sm focus:ring-green-500 focus:border-green-500" placeholder="Contoh: Keripik Singkong, Madu" />
+                                {errors.produk && <div className="text-red-500 text-sm mt-1">{errors.produk}</div>}
+                            </div>
+
+                            <div>
+                                <label className="block font-bold mb-1 text-gray-700">Link Google Maps (URL)</label>
+                                <input type="url" value={data.google_maps_url} onChange={e => setData('google_maps_url', e.target.value)} className="w-full border-gray-300 rounded shadow-sm focus:ring-green-500 focus:border-green-500" placeholder="https://goo.gl/maps/..." />
+                                {errors.google_maps_url && <div className="text-red-500 text-sm mt-1">{errors.google_maps_url}</div>}
                             </div>
 
                             <div>

@@ -5,15 +5,18 @@ export default function Edit({ umkm }) {
     const { data, setData, post, processing, errors } = useForm({
         nama_umkm: umkm?.nama_umkm || '',
         pemilik: umkm?.pemilik || '',
+        kategori: umkm?.kategori || '',
         whatsapp: umkm?.whatsapp || '',
         deskripsi: umkm?.deskripsi || '',
+        produk: umkm?.produk || '',
+        alamat: umkm?.alamat || '',
+        google_maps_url: umkm?.google_maps_url || '',
         gambar: null,
-        _method: 'put' // <-- INI TRIKNYA BIAR UPLOAD FOTO BISA DI EDIT
+        _method: 'put' // Trik untuk upload file saat method PUT/Edit di Laravel
     });
 
     const submit = (e) => {
         e.preventDefault();
-        // Menggunakan method POST untuk memanipulasi upload file di edit
         post(route('admin.umkm.update', umkm.id));
     };
 
@@ -60,6 +63,37 @@ export default function Edit({ umkm }) {
                                     <input type="text" value={data.whatsapp} onChange={e => setData('whatsapp', e.target.value)} className="w-full border-gray-300 rounded shadow-sm focus:ring-yellow-500 focus:border-yellow-500" />
                                     {errors.whatsapp && <div className="text-red-500 text-sm mt-1">{errors.whatsapp}</div>}
                                 </div>
+                            </div>
+
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div>
+                                    <label className="block font-bold mb-1 text-gray-700">Kategori Usaha</label>
+                                    <select value={data.kategori} onChange={e => setData('kategori', e.target.value)} className="w-full border-gray-300 rounded shadow-sm focus:ring-yellow-500 focus:border-yellow-500">
+                                        <option value="">Pilih Kategori</option>
+                                        <option value="Kuliner">Kuliner</option>
+                                        <option value="Kerajinan">Kerajinan / Handicraft</option>
+                                        <option value="Jasa">Jasa</option>
+                                        <option value="Pertanian">Pertanian / Peternakan</option>
+                                    </select>
+                                    {errors.kategori && <div className="text-red-500 text-sm mt-1">{errors.kategori}</div>}
+                                </div>
+                                <div>
+                                    <label className="block font-bold mb-1 text-gray-700">Alamat / Dusun</label>
+                                    <input type="text" value={data.alamat} onChange={e => setData('alamat', e.target.value)} className="w-full border-gray-300 rounded shadow-sm focus:ring-yellow-500 focus:border-yellow-500" placeholder="Contoh: Dusun Gedangan" />
+                                    {errors.alamat && <div className="text-red-500 text-sm mt-1">{errors.alamat}</div>}
+                                </div>
+                            </div>
+
+                            <div>
+                                <label className="block font-bold mb-1 text-gray-700">Produk Unggulan</label>
+                                <input type="text" value={data.produk} onChange={e => setData('produk', e.target.value)} className="w-full border-gray-300 rounded shadow-sm focus:ring-yellow-500 focus:border-yellow-500" placeholder="Contoh: Keripik Singkong, Madu" />
+                                {errors.produk && <div className="text-red-500 text-sm mt-1">{errors.produk}</div>}
+                            </div>
+
+                            <div>
+                                <label className="block font-bold mb-1 text-gray-700">Link Google Maps (URL)</label>
+                                <input type="url" value={data.google_maps_url} onChange={e => setData('google_maps_url', e.target.value)} className="w-full border-gray-300 rounded shadow-sm focus:ring-yellow-500 focus:border-yellow-500" placeholder="https://goo.gl/maps/..." />
+                                {errors.google_maps_url && <div className="text-red-500 text-sm mt-1">{errors.google_maps_url}</div>}
                             </div>
 
                             <div>

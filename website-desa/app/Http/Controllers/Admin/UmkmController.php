@@ -34,9 +34,13 @@ class UmkmController extends Controller
         $request->validate([
             'nama_umkm' => 'required|string|max:255',
             'pemilik' => 'required|string|max:255',
+            'kategori' => 'nullable|string|max:255',
             'deskripsi' => 'required',
             'whatsapp' => 'nullable|string|max:20',
-            'gambar' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:10240' // Validasi foto (maks 2MB)
+            'produk' => 'nullable|string',
+            'alamat' => 'nullable|string',
+            'google_maps_url' => 'nullable|url',
+            'gambar' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:10240'
         ]);
 
         $gambarPath = null;
@@ -47,8 +51,12 @@ class UmkmController extends Controller
         Umkm::create([
             'nama_umkm' => $request->nama_umkm,
             'pemilik' => $request->pemilik,
+            'kategori' => $request->kategori,
             'deskripsi' => $request->deskripsi,
             'whatsapp' => $request->whatsapp,
+            'produk' => $request->produk,
+            'alamat' => $request->alamat,
+            'google_maps_url' => $request->google_maps_url,
             'gambar' => $gambarPath,
         ]);
 

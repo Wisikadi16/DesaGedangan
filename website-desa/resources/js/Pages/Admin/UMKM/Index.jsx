@@ -28,6 +28,7 @@ export default function Index({ umkm }) {
                                     <tr className="bg-gray-100 text-gray-700 border-b-2 border-gray-200">
                                         <th className="p-3">No</th>
                                         <th className="p-3">Nama Usaha</th>
+                                        <th className="p-3">Kategori</th>
                                         <th className="p-3">Pemilik</th>
                                         <th className="p-3">No. WhatsApp</th>
                                         <th className="p-3 text-center">Aksi</th>
@@ -39,6 +40,11 @@ export default function Index({ umkm }) {
                                             <tr key={item.id} className="border-b hover:bg-gray-50">
                                                 <td className="p-3">{index + 1}</td>
                                                 <td className="p-3 font-semibold">{item.nama_umkm}</td>
+                                                <td className="p-3">
+                                                    <span className="bg-green-100 text-green-800 text-xs px-2.5 py-1 rounded-full font-medium">
+                                                        {item.kategori || 'Umum'}
+                                                    </span>
+                                                </td>
                                                 <td className="p-3">{item.pemilik}</td>
                                                 <td className="p-3">{item.whatsapp || '-'}</td>
                                                 <td className="p-3 text-center space-x-2">
@@ -53,7 +59,7 @@ export default function Index({ umkm }) {
                                         ))
                                     ) : (
                                         <tr>
-                                            <td colSpan="5" className="p-6 text-center text-gray-500 italic">Belum ada data UMKM yang terdaftar.</td>
+                                            <td colSpan="6" className="p-6 text-center text-gray-500 italic">Belum ada data UMKM yang terdaftar.</td>
                                         </tr>
                                     )}
                                 </tbody>

@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\News;
 use App\Models\Category;
+use App\Models\VillageProfile; // <-- Jangan lupa tambahkan import ini di atas
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Illuminate\Support\Str;
@@ -19,6 +20,28 @@ class BeritaController extends Controller
             'berita' => $berita
         ]);
     }
+
+    // ==========================================
+    // TAMBAHKAN DUA METHOD INI UNTUK HALAMAN PUBLIK
+    // ==========================================
+    public function publicIndex()
+    {
+        return Inertia::render('BeritaIndex', [
+            'profil' => VillageProfile::first(),
+            'berita' => News::with('category')->latest('tanggal')->get()
+        ]);
+    }
+
+    public function show($id)
+    {
+        $berita = News::with('category')->findOrFail($id);
+        return Inertia::render('BeritaShow', [
+            'profil' => VillageProfile::first(),
+            'berita' => $berita,
+            'beritaTerbaru' => News::latest('tanggal')->take(3)->get()
+        ]);
+    }
+    // ==========================================
 
     public function create()
     {
@@ -57,7 +80,6 @@ class BeritaController extends Controller
         return redirect()->route('admin.berita.index');
     }
 
-    // --- EDIT BERDASARKAN ID (AMAN & ANTI 404) ---
     public function edit($id)
     {
         $berita = News::findOrFail($id);
@@ -81,14 +103,12 @@ class BeritaController extends Controller
             'isi' => 'required'
         ]);
 
-        $imagePath = $berita->gambar; // Tetap pakai gambar lama jika tidak upload baru
+        $imagePath = $berita->gambar;
 
         if ($request->hasFile('gambar')) {
-            // Hapus gambar lama jika ada
             if ($berita->gambar) {
                 Storage::disk('public')->delete($berita->gambar);
             }
-            // Upload gambar baru
             $imagePath = $request->file('gambar')->store('berita', 'public');
         }
 
