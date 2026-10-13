@@ -2,55 +2,49 @@ import { Head } from '@inertiajs/react';
 import PublicLayout from '@/Layouts/PublicLayout';
 import PublicHero from '@/Components/PublicHero';
 import EmptyState from '@/Components/EmptyState';
-import { formatAngka } from '@/utils/format';
 
 export default function Dusun({ profil, dusun }) {
     const namaDesa = profil?.nama_desa || 'Desa Gedangan';
-    const daftar = dusun || [];
-    const totalPenduduk = daftar.reduce((jumlah, d) => jumlah + Number(d.jumlah_penduduk || 0), 0);
+    const daftarDusun = dusun || [];
 
     return (
         <>
-            <Head title={`Dusun - ${namaDesa}`} />
-            <PublicHero
-                title="Dusun"
-                subtitle={daftar.length > 0 ? `${daftar.length} dusun di ${namaDesa}` : `Wilayah dusun ${namaDesa}`}
-            />
+            <Head title={`Data Dusun - ${namaDesa}`} />
+            <PublicHero title="Wilayah Dusun" subtitle={`Pembagian Wilayah Administrasi ${namaDesa}`} />
 
-            <div className="max-w-6xl mx-auto py-12 px-4 w-full">
-                {daftar.length === 0 ? (
-                    <EmptyState>Data dusun sedang dilengkapi.</EmptyState>
-                ) : (
-                    <>
-                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                            {daftar.map((d) => (
-                                <div key={d.id} className="bg-white rounded-2xl shadow-md border-t-4 border-green-600 p-6 flex flex-col">
-                                    <h3 className="text-xl font-extrabold text-gray-900">{d.nama_dusun}</h3>
+            <div className="max-w-4xl mx-auto py-12 px-4 w-full">
+                <section>
+                    <h3 className="text-2xl font-extrabold text-gray-900 mb-6 pb-3 border-b border-gray-200">
+                        Daftar Dusun
+                    </h3>
 
-                                    <dl className="mt-4 space-y-2 text-sm">
-                                        <div className="flex justify-between gap-3">
-                                            <dt className="text-gray-500">Kepala Dusun</dt>
-                                            <dd className="font-semibold text-gray-800 text-right">{d.nama_kepala_dusun || '-'}</dd>
-                                        </div>
-                                        <div className="flex justify-between gap-3">
-                                            <dt className="text-gray-500">Jumlah Penduduk</dt>
-                                            <dd className="font-semibold text-green-700">{formatAngka(d.jumlah_penduduk)} jiwa</dd>
-                                        </div>
-                                    </dl>
-
-                                    {d.alamat && <p className="mt-4 text-sm text-gray-600">📍 {d.alamat}</p>}
-                                    {d.deskripsi && <p className="mt-3 text-sm text-gray-500 leading-relaxed">{d.deskripsi}</p>}
+                    {daftarDusun.length > 0 ? (
+                        <div className="space-y-4">
+                            {daftarDusun.map((d, index) => (
+                                <div key={index} className="bg-white p-6 rounded-2xl shadow-sm border border-gray-200 flex flex-col sm:flex-row sm:items-center gap-4 hover:border-green-300 transition">
+                                    <div className="w-12 h-12 bg-green-100 text-green-700 rounded-full flex items-center justify-center font-extrabold text-xl shrink-0">
+                                        {index + 1}
+                                    </div>
+                                    <div className="flex-grow">
+                                        <h4 className="text-xl font-bold text-gray-900">{d.nama_dusun}</h4>
+                                        {d.nama_kepala_dusun && (
+                                            <p className="text-green-700 font-medium text-sm mt-1">
+                                                Kepala Dusun: {d.nama_kepala_dusun}
+                                            </p>
+                                        )}
+                                        {d.deskripsi && (
+                                            <p className="text-gray-600 mt-2 text-sm leading-relaxed">
+                                                {d.deskripsi}
+                                            </p>
+                                        )}
+                                    </div>
                                 </div>
                             ))}
                         </div>
-
-                        {totalPenduduk > 0 && (
-                            <p className="text-center text-gray-600 mt-8">
-                                Total penduduk seluruh dusun: <strong className="text-green-700">{formatAngka(totalPenduduk)} jiwa</strong>
-                            </p>
-                        )}
-                    </>
-                )}
+                    ) : (
+                        <EmptyState>Data wilayah kedusunan sedang dilengkapi oleh pemerintah desa.</EmptyState>
+                    )}
+                </section>
             </div>
         </>
     );
