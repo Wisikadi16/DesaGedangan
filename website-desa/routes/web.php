@@ -1,12 +1,13 @@
 <?php
 
+use App\Http\Controllers\Admin\BeritaController;
+use App\Http\Controllers\Admin\ProfilController;
+use App\Http\Controllers\Admin\UmkmController;
 use App\Http\Controllers\ProfileController;
+use App\Models\News;
+use App\Models\VillageProfile;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
-use App\Models\VillageProfile;
-use App\Models\News;
-use App\Http\Controllers\Admin\UmkmController;
-use App\Http\Controllers\Admin\BeritaController;
 
 // ==============================================================
 // 1. HALAMAN PUBLIK (Beranda Utama)
@@ -14,7 +15,11 @@ use App\Http\Controllers\Admin\BeritaController;
 Route::get('/', function () {
     return Inertia::render('Welcome', [
         'profil' => VillageProfile::first(),
-        'berita' => News::with('category')->latest('tanggal')->take(3)->get() // Ambil 3 berita terbaru
+        'berita' => News::with('category')
+            ->where('status', 'published')
+            ->latest('tanggal')
+            ->take(3)
+            ->get(),
     ]);
 })->name('home');
 
@@ -24,7 +29,7 @@ Route::get('/', function () {
 // Profil
 Route::get('/profil/desa', function () {
     return Inertia::render('ProfilDesa', [
-        'profil' => VillageProfile::first()
+        'profil' => VillageProfile::first(),
     ]);
 })->name('profil.desa');
 
@@ -32,11 +37,11 @@ Route::get('/profil/pemerintahan', fn() => Inertia::render('Blank', ['title' => 
 Route::get('/profil/kondisi-umum', fn() => Inertia::render('Blank', ['title' => 'Kondisi Umum']))->name('profil.kondisi');
 Route::get('/profil/penduduk', fn() => Inertia::render('Blank', ['title' => 'Profil Penduduk']))->name('profil.penduduk');
 Route::get('/profil/potensi-masalah', fn() => Inertia::render('Blank', ['title' => 'Potensi dan Masalah']))->name('profil.masalah');
-Route::get('/profil/dusun', fn() => Inertia::render('Blank', ['title' => 'Data 7 Dusun (Bandungan, Jaten, Bendo, dll)']))->name('profil.dusun');
+Route::get('/profil/dusun', fn() => Inertia::render('Blank', ['title' => 'Dusun']))->name('profil.dusun');
 
 // Berita & Wisata (Publik Berita)
 Route::get('/berita', [BeritaController::class, 'publicIndex'])->name('berita');
-Route::get('/berita/{id}', [BeritaController::class, 'show'])->name('berita.show');
+Route::get('/berita/{id}', [BeritaController::class, 'show'])->whereNumber('id')->name('berita.show');
 Route::get('/desa-wisata', fn() => Inertia::render('Blank', ['title' => 'Desa Wisata & Peta Wisata']))->name('wisata');
 
 // Potensi
@@ -75,9 +80,9 @@ Route::middleware(['auth', 'verified'])->prefix('admin')->name('admin.')->group(
     Route::put('/berita/{id}', [BeritaController::class, 'update'])->name('berita.update');
     Route::delete('/berita/{id}', [BeritaController::class, 'destroy'])->name('berita.destroy');
 
-    // Resource UMKM & Profil
-    Route::resource('/umkm', UmkmController::class);
-    Route::resource('/profil', \App\Http\Controllers\Admin\ProfilController::class);
+    // Resource UMKM & Profil (hanya rute yang method-nya memang ada di controller)
+    Route::resource('/umkm', UmkmController::class)->except('show');
+    Route::resource('/profil', ProfilController::class)->only('index');
 });
 
 // Bawaan sistem login Laravel
