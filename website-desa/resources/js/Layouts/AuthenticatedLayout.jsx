@@ -3,13 +3,33 @@ import Dropdown from '@/Components/Dropdown';
 import NavLink from '@/Components/NavLink';
 import ResponsiveNavLink from '@/Components/ResponsiveNavLink';
 import { Link, usePage } from '@inertiajs/react';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+
+/** Menu panel admin. Tambah menu baru cukup di sini. */
+const NAV = [
+    { label: 'Dashboard', route: 'admin.dashboard', match: 'admin.dashboard' },
+    { label: 'Berita', route: 'admin.berita.index', match: 'admin.berita.*' },
+    { label: 'UMKM', route: 'admin.umkm.index', match: 'admin.umkm.*' },
+    { label: 'Profil Desa', route: 'admin.profil.index', match: 'admin.profil.*' },
+    { label: 'Pemerintahan', route: 'admin.pemerintahan.index', match: 'admin.pemerintahan.*' },
+    { label: 'Dusun', route: 'admin.dusun.index', match: 'admin.dusun.*' },
+];
 
 export default function AuthenticatedLayout({ header, children }) {
-    const user = usePage().props.auth.user;
+    const { auth, flash } = usePage().props;
+    const user = auth.user;
 
-    const [showingNavigationDropdown, setShowingNavigationDropdown] =
-        useState(false);
+    const [showingNavigationDropdown, setShowingNavigationDropdown] = useState(false);
+
+    // Notifikasi sukses (dari ->with('message', '...') di controller), hilang sendiri setelah 4 detik
+    const [showFlash, setShowFlash] = useState(false);
+    useEffect(() => {
+        if (flash?.message) {
+            setShowFlash(true);
+            const timer = setTimeout(() => setShowFlash(false), 4000);
+            return () => clearTimeout(timer);
+        }
+    }, [flash]);
 
     return (
         <div className="min-h-screen bg-gray-100">
@@ -23,17 +43,19 @@ export default function AuthenticatedLayout({ header, children }) {
                                 </Link>
                             </div>
 
-                            <div className="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
-                                <NavLink
-                                    href={route('admin.dashboard')}
-                                    active={route().current('admin.dashboard')}
-                                >
-                                    Dashboard
-                                </NavLink>
+                            <div className="hidden space-x-6 lg:-my-px lg:ms-8 lg:flex">
+                                {NAV.map((item) => (
+                                    <NavLink key={item.route} href={route(item.route)} active={route().current(item.match)}>
+                                        {item.label}
+                                    </NavLink>
+                                ))}
                             </div>
                         </div>
 
-                        <div className="hidden sm:ms-6 sm:flex sm:items-center">
+                        <div className="hidden lg:ms-6 lg:flex lg:items-center">
+                            <Link href="/" className="text-sm text-gray-500 hover:text-green-700 me-4">
+                                Lihat Website &rarr;
+                            </Link>
                             <div className="relative ms-3">
                                 <Dropdown>
                                     <Dropdown.Trigger>
@@ -61,16 +83,8 @@ export default function AuthenticatedLayout({ header, children }) {
                                     </Dropdown.Trigger>
 
                                     <Dropdown.Content>
-                                        <Dropdown.Link
-                                            href={route('profile.edit')}
-                                        >
-                                            Profile
-                                        </Dropdown.Link>
-                                        <Dropdown.Link
-                                            href={route('logout')}
-                                            method="post"
-                                            as="button"
-                                        >
+                                        <Dropdown.Link href={route('profile.edit')}>Profile</Dropdown.Link>
+                                        <Dropdown.Link href={route('logout')} method="post" as="button">
                                             Log Out
                                         </Dropdown.Link>
                                     </Dropdown.Content>
@@ -78,38 +92,22 @@ export default function AuthenticatedLayout({ header, children }) {
                             </div>
                         </div>
 
-                        <div className="-me-2 flex items-center sm:hidden">
+                        <div className="-me-2 flex items-center lg:hidden">
                             <button
-                                onClick={() =>
-                                    setShowingNavigationDropdown(
-                                        (previousState) => !previousState,
-                                    )
-                                }
+                                onClick={() => setShowingNavigationDropdown((previousState) => !previousState)}
                                 className="inline-flex items-center justify-center rounded-md p-2 text-gray-400 transition duration-150 ease-in-out hover:bg-gray-100 hover:text-gray-500 focus:bg-gray-100 focus:text-gray-500 focus:outline-none"
+                                aria-label="Buka menu"
                             >
-                                <svg
-                                    className="h-6 w-6"
-                                    stroke="currentColor"
-                                    fill="none"
-                                    viewBox="0 0 24 24"
-                                >
+                                <svg className="h-6 w-6" stroke="currentColor" fill="none" viewBox="0 0 24 24">
                                     <path
-                                        className={
-                                            !showingNavigationDropdown
-                                                ? 'inline-flex'
-                                                : 'hidden'
-                                        }
+                                        className={!showingNavigationDropdown ? 'inline-flex' : 'hidden'}
                                         strokeLinecap="round"
                                         strokeLinejoin="round"
                                         strokeWidth="2"
                                         d="M4 6h16M4 12h16M4 18h16"
                                     />
                                     <path
-                                        className={
-                                            showingNavigationDropdown
-                                                ? 'inline-flex'
-                                                : 'hidden'
-                                        }
+                                        className={showingNavigationDropdown ? 'inline-flex' : 'hidden'}
                                         strokeLinecap="round"
                                         strokeLinejoin="round"
                                         strokeWidth="2"
@@ -121,40 +119,25 @@ export default function AuthenticatedLayout({ header, children }) {
                     </div>
                 </div>
 
-                <div
-                    className={
-                        (showingNavigationDropdown ? 'block' : 'hidden') +
-                        ' sm:hidden'
-                    }
-                >
+                <div className={(showingNavigationDropdown ? 'block' : 'hidden') + ' lg:hidden'}>
                     <div className="space-y-1 pb-3 pt-2">
-                        <ResponsiveNavLink
-                            href={route('admin.dashboard')}
-                            active={route().current('admin.dashboard')}
-                        >
-                            Dashboard
-                        </ResponsiveNavLink>
+                        {NAV.map((item) => (
+                            <ResponsiveNavLink key={item.route} href={route(item.route)} active={route().current(item.match)}>
+                                {item.label}
+                            </ResponsiveNavLink>
+                        ))}
                     </div>
 
                     <div className="border-t border-gray-200 pb-1 pt-4">
                         <div className="px-4">
-                            <div className="text-base font-medium text-gray-800">
-                                {user.name}
-                            </div>
-                            <div className="text-sm font-medium text-gray-500">
-                                {user.email}
-                            </div>
+                            <div className="text-base font-medium text-gray-800">{user.name}</div>
+                            <div className="text-sm font-medium text-gray-500">{user.email}</div>
                         </div>
 
                         <div className="mt-3 space-y-1">
-                            <ResponsiveNavLink href={route('profile.edit')}>
-                                Profile
-                            </ResponsiveNavLink>
-                            <ResponsiveNavLink
-                                method="post"
-                                href={route('logout')}
-                                as="button"
-                            >
+                            <ResponsiveNavLink href="/">Lihat Website</ResponsiveNavLink>
+                            <ResponsiveNavLink href={route('profile.edit')}>Profile</ResponsiveNavLink>
+                            <ResponsiveNavLink method="post" href={route('logout')} as="button">
                                 Log Out
                             </ResponsiveNavLink>
                         </div>
@@ -162,11 +145,28 @@ export default function AuthenticatedLayout({ header, children }) {
                 </div>
             </nav>
 
+            {/* Notifikasi sukses */}
+            {showFlash && flash?.message && (
+                <div
+                    role="status"
+                    className="fixed top-20 right-4 z-50 max-w-sm bg-green-600 text-white px-5 py-3 rounded-lg shadow-xl flex items-start gap-3"
+                >
+                    <span>✓</span>
+                    <span className="text-sm font-semibold">{flash.message}</span>
+                    <button
+                        type="button"
+                        onClick={() => setShowFlash(false)}
+                        className="ml-2 text-white/80 hover:text-white leading-none"
+                        aria-label="Tutup"
+                    >
+                        ×
+                    </button>
+                </div>
+            )}
+
             {header && (
                 <header className="bg-white shadow">
-                    <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
-                        {header}
-                    </div>
+                    <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">{header}</div>
                 </header>
             )}
 
