@@ -10,12 +10,11 @@ export default function ProfilDesa({ profil }) {
         <>
             <Head title={`Profil Desa - ${namaDesa}`} />
             
-            {/* Header Banner seragam dengan halaman lain */}
             <PublicHero title="Profil Desa" subtitle={`Sejarah, Visi, dan Misi ${namaDesa}`} />
 
             <div className="max-w-5xl mx-auto py-12 px-4 w-full space-y-12">
                 
-                {/* --- BAGIAN 1: SEJARAH --- */}
+                {/* SEJARAH */}
                 <section>
                     <h3 className="text-3xl font-extrabold text-gray-900 mb-6 pb-3 border-b border-gray-200">
                         Sejarah Desa
@@ -29,9 +28,8 @@ export default function ProfilDesa({ profil }) {
                     )}
                 </section>
 
-                {/* --- BAGIAN 2: VISI & MISI --- */}
+                {/* VISI & MISI */}
                 <section className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                    {/* Visi */}
                     <div>
                         <h3 className="text-2xl font-extrabold text-green-700 mb-4 flex items-center gap-2">
                             🎯 Visi
@@ -45,7 +43,6 @@ export default function ProfilDesa({ profil }) {
                         )}
                     </div>
 
-                    {/* Misi */}
                     <div>
                         <h3 className="text-2xl font-extrabold text-green-700 mb-4 flex items-center gap-2">
                             🚀 Misi
@@ -65,5 +62,5 @@ export default function ProfilDesa({ profil }) {
     );
 }
 
-// Gunakan Layout Terpusat agar Navbar & Footer otomatis muncul
+// INI KUNCI UTAMA AGAR NAVBAR MUNCUL:
 ProfilDesa.layout = (page) => <PublicLayout>{page}</PublicLayout>;
