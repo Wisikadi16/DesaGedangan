@@ -1,11 +1,11 @@
 import { Head, Link } from '@inertiajs/react';
 import { useState } from 'react';
+import PublicLayout from '@/Layouts/PublicLayout';
 
 export default function UmkmIndex({ profil, umkm, auth }) {
     const [search, setSearch] = useState('');
     const [selectedCategory, setSelectedCategory] = useState('Semua');
 
-    // Filter pencarian berdasarkan nama usaha atau produk, serta kategori
     const filteredUmkm = umkm.filter((item) => {
         const matchesSearch = item.nama_umkm?.toLowerCase().includes(search.toLowerCase()) ||
                               (item.produk && item.produk.toLowerCase().includes(search.toLowerCase())) ||
@@ -18,35 +18,12 @@ export default function UmkmIndex({ profil, umkm, auth }) {
     const categories = ['Semua', 'Kuliner', 'Kerajinan', 'Jasa', 'Pertanian'];
 
     return (
-        <>
+        <PublicLayout profil={profil} auth={auth}>
             <Head title={`Direktori UMKM - ${profil?.nama_desa || 'Desa Gedangan'}`} />
-            <div className="min-h-screen bg-gray-50 text-gray-800 font-sans flex flex-col justify-between">
-                
-                {/* Navbar */}
-                <nav className="bg-white shadow-md w-full fixed top-0 z-50 h-16">
-                    <div className="w-full px-6 lg:px-12 flex justify-between items-center h-full">
-                        <Link href={route('home')} className="font-extrabold text-2xl text-green-700 tracking-wider">
-                            {profil?.nama_desa || 'DESA'}
-                        </Link>
-                        <div className="flex items-center space-x-8 h-full">
-                            <ul className="hidden lg:flex space-x-6 font-bold text-sm text-gray-700 h-full">
-                                <li className="h-full flex items-center"><Link href={route('home')} className="hover:text-green-600 transition">Beranda</Link></li>
-                                <li className="h-full flex items-center"><Link href={route('umkm.index')} className="text-green-600 transition">UMKM Warga</Link></li>
-                                <li className="h-full flex items-center"><Link href={route('buku-tamu')} className="hover:text-green-600 transition">Buku Tamu</Link></li>
-                            </ul>
-                            <div>
-                                {auth?.user ? (
-                                    <Link href={route('admin.dashboard')} className="px-5 py-2 bg-green-600 text-white text-sm rounded-md font-bold hover:bg-green-700 transition shadow-sm">Panel Admin</Link>
-                                ) : (
-                                    <Link href={route('login')} className="px-5 py-2 bg-gray-800 text-white text-sm rounded-md font-bold hover:bg-gray-900 transition shadow-sm">Login</Link>
-                                )}
-                            </div>
-                        </div>
-                    </div>
-                </nav>
-
+            
+            <div className="bg-gray-50 text-gray-800 font-sans">
                 {/* Header Banner */}
-                <div className="bg-gradient-to-r from-green-800 to-teal-700 text-white text-center py-20 px-4 mt-16">
+                <div className="bg-gradient-to-r from-green-800 to-teal-700 text-white text-center py-20 px-4">
                     <h2 className="text-4xl font-extrabold mb-3">Direktori UMKM & Produk Warga</h2>
                     <p className="text-green-100 max-w-2xl mx-auto text-lg">
                         Dukung pertumbuhan ekonomi lokal dengan berbelanja langsung ke produk-produk unggulan warga Desa Gedangan.
@@ -55,7 +32,6 @@ export default function UmkmIndex({ profil, umkm, auth }) {
 
                 {/* Filter & Search Section */}
                 <div className="max-w-7xl mx-auto px-4 mt-10 w-full flex flex-col md:flex-row justify-between items-center gap-4">
-                    {/* Search Bar */}
                     <div className="w-full md:w-1/3">
                         <input 
                             type="text" 
@@ -66,7 +42,6 @@ export default function UmkmIndex({ profil, umkm, auth }) {
                         />
                     </div>
 
-                    {/* Category Filter Tabs */}
                     <div className="flex flex-wrap gap-2 justify-center">
                         {categories.map((cat) => (
                             <button
@@ -90,8 +65,6 @@ export default function UmkmIndex({ profil, umkm, auth }) {
                         {filteredUmkm.length > 0 ? (
                             filteredUmkm.map((item) => (
                                 <div key={item.id} className="bg-white rounded-2xl shadow-md overflow-hidden border border-gray-200 flex flex-col hover:shadow-xl transition duration-300">
-                                    
-                                    {/* Render Gambar UMKM & Badge Kategori */}
                                     <div className="h-48 bg-green-600 flex items-center justify-center text-white text-3xl font-bold relative overflow-hidden">
                                         {item.gambar ? (
                                             <img 
@@ -127,7 +100,6 @@ export default function UmkmIndex({ profil, umkm, auth }) {
                                                 <span className="font-bold text-gray-700 bg-gray-100 px-2.5 py-1 rounded">
                                                     📞 {item.whatsapp || '-'}
                                                 </span>
-                                                {/* Tombol Google Maps */}
                                                 {item.google_maps_url ? (
                                                     <a 
                                                         href={item.google_maps_url} 
@@ -153,15 +125,6 @@ export default function UmkmIndex({ profil, umkm, auth }) {
                                                         💬 Chat WhatsApp
                                                     </a>
                                                 )}
-                                                <a 
-                                                    href={`https://api.whatsapp.com/send?text=${encodeURIComponent(`Rekomendasi UMKM Desa Gedangan:\n*${item.nama_umkm}* (${item.kategori || 'UMKM'})\nPemilik: ${item.pemilik}\n\n${item.deskripsi}\n\nYuk dukung produk warga lokal!`)}`}
-                                                    target="_blank" 
-                                                    rel="noopener noreferrer" 
-                                                    className="bg-gray-100 text-gray-700 px-3 py-2.5 rounded-xl text-xs font-bold hover:bg-gray-200 transition"
-                                                    title="Bagikan ke WhatsApp"
-                                                >
-                                                    🔗 Bagikan
-                                                </a>
                                             </div>
                                         </div>
                                     </div>
@@ -174,14 +137,7 @@ export default function UmkmIndex({ profil, umkm, auth }) {
                         )}
                     </div>
                 </div>
-
-                {/* Footer */}
-                <footer className="bg-gray-900 text-white text-center py-10 mt-12">
-                    <h3 className="text-xl font-bold mb-2">{profil?.nama_desa || 'Desa Gedangan'}</h3>
-                    <p className="text-gray-400 text-sm mb-4">Kecamatan Tuntang, Kabupaten Semarang, Jawa Tengah</p>
-                    <p className="text-gray-500 text-xs">&copy; 2026 Pemerintah Desa. Dikembangkan oleh KKN UNNES GIAT 17.</p>
-                </footer>
             </div>
-        </>
+        </PublicLayout>
     );
 }

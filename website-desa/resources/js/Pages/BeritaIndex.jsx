@@ -1,29 +1,14 @@
 import { Head, Link } from '@inertiajs/react';
+import PublicLayout from '@/Layouts/PublicLayout';
 
-export default function BeritaIndex({ profil, berita }) {
+export default function BeritaIndex({ profil, berita, auth }) {
     return (
-        <>
+        <PublicLayout profil={profil} auth={auth}>
             <Head title={`Arsip Berita & Kegiatan - ${profil?.nama_desa || 'Desa Gedangan'}`} />
-            <div className="min-h-screen bg-gray-50 text-gray-800 font-sans flex flex-col justify-between">
-                
-                {/* Navbar */}
-                <nav className="bg-white shadow-md w-full fixed top-0 z-50 h-16">
-                    <div className="w-full px-6 lg:px-12 flex justify-between items-center h-full">
-                        <Link href={route('home')} className="font-extrabold text-2xl text-green-700 tracking-wider">
-                            {profil?.nama_desa || 'DESA'}
-                        </Link>
-                        <div className="flex items-center space-x-8 h-full">
-                            <ul className="hidden lg:flex space-x-6 font-bold text-sm text-gray-700 h-full">
-                                <li className="h-full flex items-center"><Link href={route('home')} className="hover:text-green-600 transition">Beranda</Link></li>
-                                <li className="h-full flex items-center"><Link href={route('berita')} className="text-green-600 transition">Berita</Link></li>
-                                <li className="h-full flex items-center"><Link href={route('umkm.index')} className="hover:text-green-600 transition">UMKM Warga</Link></li>
-                            </ul>
-                        </div>
-                    </div>
-                </nav>
-
+            
+            <div className="bg-gray-50 text-gray-800 font-sans">
                 {/* Header Banner */}
-                <div className="bg-gradient-to-r from-green-800 to-teal-700 text-white text-center py-20 px-4 mt-16">
+                <div className="bg-gradient-to-r from-green-800 to-teal-700 text-white text-center py-20 px-4">
                     <h2 className="text-4xl font-extrabold mb-3">Berita & Kegiatan Desa</h2>
                     <p className="text-green-100 max-w-2xl mx-auto text-lg">
                         Informasi terbaru seputar kegiatan pemerintahan desa, pembangunan, dan program KKN di Desa Gedangan.
@@ -50,7 +35,6 @@ export default function BeritaIndex({ profil, berita }) {
                                             <span className="text-xs font-bold text-green-600 bg-green-50 px-2.5 py-1 rounded-md mb-2 inline-block">
                                                 {item.tanggal ? new Date(item.tanggal).toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' }) : 'Terbaru'}
                                             </span>
-                                            {/* PERBAIKAN: Menggunakan item.judul */}
                                             <h4 className="font-bold text-xl text-gray-900 mb-2 leading-snug">{item.judul}</h4>
                                             <p className="text-sm text-gray-600 mb-4 line-clamp-3">{item.isi}</p>
                                         </div>
@@ -59,7 +43,7 @@ export default function BeritaIndex({ profil, berita }) {
                                                 href={route('berita.show', item.id)} 
                                                 className="text-green-600 hover:text-green-800 text-sm font-bold flex items-center gap-1"
                                             >
-                                                Baca Selengkapnya →
+                                                Baca Selengkapnya &rarr;
                                             </Link>
                                         </div>
                                     </div>
@@ -72,14 +56,7 @@ export default function BeritaIndex({ profil, berita }) {
                         )}
                     </div>
                 </div>
-
-                {/* Footer */}
-                <footer className="bg-gray-900 text-white text-center py-10 mt-12">
-                    <h3 className="text-xl font-bold mb-2">{profil?.nama_desa || 'Desa Gedangan'}</h3>
-                    <p className="text-gray-400 text-sm mb-4">Kecamatan Tuntang, Kabupaten Semarang, Jawa Tengah</p>
-                    <p className="text-gray-500 text-xs">&copy; 2026 Pemerintah Desa. Dikembangkan oleh KKN UNNES GIAT 17.</p>
-                </footer>
             </div>
-        </>
+        </PublicLayout>
     );
 }

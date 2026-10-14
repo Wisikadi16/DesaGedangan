@@ -22,7 +22,7 @@ export default function PublicLayout({ children, profil, auth }) {
                         <ul className="flex space-x-5 font-bold text-[13px] text-gray-700 h-full">
                             <li className="h-full flex items-center"><Link href={route('home')} className="hover:text-green-600 transition">Beranda</Link></li>
                             
-                            {/* Dropdown Profil (Diarahkan ke /profil#id) */}
+                            {/* Dropdown Profil */}
                             <li className="relative group h-full flex items-center">
                                 <span className="cursor-pointer hover:text-green-600 transition h-full flex items-center">Profil ▾</span>
                                 <ul className="absolute top-full left-0 w-48 bg-white border-t-2 border-green-600 shadow-xl hidden group-hover:block z-50">
@@ -103,7 +103,6 @@ export default function PublicLayout({ children, profil, auth }) {
                         <div className="py-2 border-t border-gray-100 space-y-1">
                             <span className="text-xs uppercase tracking-wider text-green-700 font-bold block mb-1">Profil Desa</span>
                             <div className="pl-3 flex flex-col space-y-1 text-xs">
-                                {/* Diarahkan ke /profil#id */}
                                 <a href="/profil#sejarah" onClick={() => setIsOpen(false)} className="text-gray-600 py-1 block">Profil Desa</a>
                                 <a href="/profil#pemerintahan" onClick={() => setIsOpen(false)} className="text-gray-600 py-1 block">Pemerintahan</a>
                                 <a href="/profil#kondisi" onClick={() => setIsOpen(false)} className="text-gray-600 py-1 block">Kondisi Umum</a>
@@ -161,11 +160,43 @@ export default function PublicLayout({ children, profil, auth }) {
                 {children}
             </main>
 
-            {/* Footer */}
-            <footer className="bg-gray-900 text-white text-center py-10 mt-auto">
-                <h3 className="text-xl font-bold mb-2">{profil?.nama_desa || 'Desa Gedangan'}</h3>
-                <p className="text-gray-400 text-sm mb-4">Kecamatan Tuntang, Kabupaten Semarang, Jawa Tengah</p>
-                <p className="text-gray-500 text-xs">&copy; 2026 Pemerintah Desa. Dikembangkan oleh KKN UNNES GIAT 17.</p>
+            {/* --- FOOTER BARU PERSIS SEPERTI ARSIP LAMA (Tanpa Arsip, 2 Kolom Rapi) --- */}
+            <footer className="bg-[#333333] text-gray-300 pt-12 pb-6 px-4 lg:px-16 mt-auto border-t-4 border-gray-700">
+                <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-12 mb-8">
+                    
+                    {/* Kolom 1: TENTANG */}
+                    <div>
+                        <h4 className="text-white font-bold tracking-wider text-sm uppercase mb-4 pb-2 border-b-2 border-red-600 inline-block">
+                            TENTANG
+                        </h4>
+                        <div className="space-y-3 text-xs leading-relaxed text-gray-300">
+                            <p>
+                                <span className="text-red-500 font-bold text-base">gedangan.desa.id</span> adalah media online Desa Gedangan yang bertujuan sebagai sarana informasi digital bagi masyarakat Desa Gedangan Kecamatan Tuntang Kabupaten Semarang agar lebih mengenal dan mengetahui berbagai situasi di Desa Gedangan. Media ini dikelola oleh Pemerintah Desa Gedangan dan ingin menyediakan tempat warga masyarakat Desa Gedangan agar bisa berbagi informasi tentang apa yang ada di desanya.
+                            </p>
+                        </div>
+                    </div>
+
+                    {/* Kolom 2: REDAKSI */}
+                    <div>
+                        <h4 className="text-white font-bold tracking-wider text-sm uppercase mb-4 pb-2 border-b-2 border-red-600 inline-block">
+                            REDAKSI
+                        </h4>
+                        <div className="space-y-1.5 text-xs text-gray-300 leading-relaxed">
+                            <p><strong className="text-white">Penanggung Jawab :</strong> Kepala Desa Gedangan: DAROJI</p>
+                            <p><strong className="text-white">Alamat Redaksi :</strong> Jl. Salatiga - Banyubiru Desa Gedangan Kec. Tuntang Kab. Semarang Jawa Tengah 50773</p>
+                            <p><strong className="text-white">Telephone:</strong> (0298) 6031115</p>
+                            <p><strong className="text-white">Email:</strong> pemerintahdesagedangan@gmail.com</p>
+                            <p><strong className="text-white">Website:</strong> http://gedangan.desa.id</p>
+                            <p><strong className="text-white">Admin :</strong> Wachid Nuryadi</p>
+                        </div>
+                    </div>
+
+                </div>
+
+                {/* Copyright Bawah */}
+                <div className="max-w-7xl mx-auto pt-6 border-t border-gray-700 text-center text-xs text-gray-400">
+                    Hak Cipta &copy; 2025 DESA GEDANGAN. Tema: ColorNews oleh ThemeGrill. Dipersembahkan oleh WordPress.
+                </div>
             </footer>
         </div>
     );

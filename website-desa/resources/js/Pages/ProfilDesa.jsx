@@ -16,7 +16,7 @@ export default function ProfilDesa({ profil, perangkat, dusun, auth }) {
             
             <div className="bg-gray-50 text-gray-800 font-sans scroll-smooth">
                 {/* Hero Khusus Profil */}
-                <div className="bg-green-800 text-white text-center py-24 px-4 mt-16">
+                <div className="bg-green-800 text-white text-center py-24 px-4">
                     <h1 className="text-4xl md:text-5xl font-extrabold mb-4">Profil {namaDesa}</h1>
                     <p className="text-lg opacity-90 max-w-2xl mx-auto font-light">Kenali lebih dekat sejarah, pemerintahan, potensi, dan kondisi wilayah desa kami.</p>
                 </div>
