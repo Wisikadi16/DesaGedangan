@@ -40,18 +40,31 @@ class ProfilController extends Controller
             'visi' => 'nullable|string|max:2000',
             'misi' => 'nullable|string|max:5000',
 
-            // Kondisi umum
+            // Kondisi umum & Geografis (Tambahan baru)
             'luas_wilayah' => 'nullable|string|max:100',
+            'letak_geografis' => 'nullable|string|max:255',
+            'ketinggian' => 'nullable|string|max:255',
             'batas_utara' => 'nullable|string|max:255',
             'batas_selatan' => 'nullable|string|max:255',
             'batas_timur' => 'nullable|string|max:255',
             'batas_barat' => 'nullable|string|max:255',
+            'iklim' => 'nullable|string|max:100',
+            'suhu' => 'nullable|string|max:100',
+            'curah_hujan' => 'nullable|string|max:100',
+            'kelembaban' => 'nullable|string|max:100',
+            'luas_datar' => 'nullable|string|max:100',
+            'luas_pegunungan' => 'nullable|string|max:100',
+            'sawah_irigasi' => 'nullable|string|max:100',
+            'pemukiman' => 'nullable|string|max:100',
             'kondisi_umum' => 'nullable|string|max:10000',
 
-            // Kependudukan
+            // Kependudukan & Data JSON
             'jumlah_laki_laki' => 'nullable|integer|min:0|max:10000000',
             'jumlah_perempuan' => 'nullable|integer|min:0|max:10000000',
             'jumlah_kk' => 'nullable|integer|min:0|max:10000000',
+            'kelompok_umur' => 'nullable|array',
+            'pekerjaan' => 'nullable|array',
+            'agama' => 'nullable|array',
 
             // Potensi & masalah
             'potensi' => 'nullable|string|max:10000',
