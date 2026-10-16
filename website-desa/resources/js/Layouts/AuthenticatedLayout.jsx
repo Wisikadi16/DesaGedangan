@@ -5,14 +5,17 @@ import ResponsiveNavLink from '@/Components/ResponsiveNavLink';
 import { Link, usePage } from '@inertiajs/react';
 import { useEffect, useState } from 'react';
 
-/** Menu panel admin. Tambah menu baru cukup di sini. */
+/** Menu panel admin menggunakan URL murni agar aman dari error Ziggy */
 const NAV = [
-    { label: 'Dashboard', route: 'admin.dashboard', match: 'admin.dashboard' },
-    { label: 'Berita', route: 'admin.berita.index', match: 'admin.berita.*' },
-    { label: 'UMKM', route: 'admin.umkm.index', match: 'admin.umkm.*' },
-    { label: 'Profil Desa', route: 'admin.profil.index', match: 'admin.profil.*' },
-    { label: 'Pemerintahan', route: 'admin.pemerintahan.index', match: 'admin.pemerintahan.*' },
-    { label: 'Dusun', route: 'admin.dusun.index', match: 'admin.dusun.*' },
+    { label: 'Dashboard', url: '/admin/dashboard', match: 'admin.dashboard' },
+    { label: 'Berita', url: '/admin/berita', match: 'admin.berita.*' },
+    { label: 'UMKM', url: '/admin/umkm', match: 'admin.umkm.*' },
+    { label: 'Profil Desa', url: '/admin/profil', match: 'admin.profil.*' },
+    { label: 'Pemerintahan', url: '/admin/pemerintahan', match: 'admin.pemerintahan.*' },
+    { label: 'Dusun', url: '/admin/dusun', match: 'admin.dusun.*' },
+    { label: 'Desa Wisata', url: '/admin/desa-wisata', match: 'admin.desa-wisata*' },
+    { label: 'Syarat Pelayanan', url: '/admin/syarat-pelayanan', match: 'admin.syarat-pelayanan*' },
+    { label: 'Layanan SMARD', url: '/admin/layanan-smard', match: 'admin.layanan-smard*' }, // 👈 Menu Layanan SMARD ditambahkan di sini
 ];
 
 export default function AuthenticatedLayout({ header, children }) {
@@ -21,7 +24,6 @@ export default function AuthenticatedLayout({ header, children }) {
 
     const [showingNavigationDropdown, setShowingNavigationDropdown] = useState(false);
 
-    // Notifikasi sukses (dari ->with('message', '...') di controller), hilang sendiri setelah 4 detik
     const [showFlash, setShowFlash] = useState(false);
     useEffect(() => {
         if (flash?.message) {
@@ -45,7 +47,7 @@ export default function AuthenticatedLayout({ header, children }) {
 
                             <div className="hidden space-x-6 lg:-my-px lg:ms-8 lg:flex">
                                 {NAV.map((item) => (
-                                    <NavLink key={item.route} href={route(item.route)} active={route().current(item.match)}>
+                                    <NavLink key={item.label} href={item.url} active={route().current(item.match)}>
                                         {item.label}
                                     </NavLink>
                                 ))}
@@ -122,7 +124,7 @@ export default function AuthenticatedLayout({ header, children }) {
                 <div className={(showingNavigationDropdown ? 'block' : 'hidden') + ' lg:hidden'}>
                     <div className="space-y-1 pb-3 pt-2">
                         {NAV.map((item) => (
-                            <ResponsiveNavLink key={item.route} href={route(item.route)} active={route().current(item.match)}>
+                            <ResponsiveNavLink key={item.label} href={item.url} active={route().current(item.match)}>
                                 {item.label}
                             </ResponsiveNavLink>
                         ))}
