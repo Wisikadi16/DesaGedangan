@@ -1,8 +1,8 @@
-import { Link } from '@inertiajs/react';
+import { Link, usePage } from '@inertiajs/react';
 import { useState } from 'react';
 
-export default function PublicLayout({ children, profil, auth }) {
-    // State untuk membuka/menutup menu di HP
+export default function PublicLayout({ children, profil }) {
+    const { auth } = usePage().props;
     const [isOpen, setIsOpen] = useState(false);
 
     return (
@@ -71,12 +71,12 @@ export default function PublicLayout({ children, profil, auth }) {
                             <li className="h-full flex items-center"><Link href={route('kontak')} className="hover:text-green-600 transition">Kontak</Link></li>
                         </ul>
 
-                        {/* Tombol Login Desktop */}
+                        {/* Tombol Login / Panel Admin Desktop */}
                         <div className="h-full flex items-center">
                             {auth?.user ? (
                                 <Link href={route('admin.dashboard')} className="px-5 py-2 bg-green-600 text-white text-sm rounded-md font-bold hover:bg-green-700 transition shadow-sm">Panel Admin</Link>
                             ) : (
-                                <Link href={route('login')} className="px-5 py-2 bg-gray-800 text-white text-sm rounded-md font-bold hover:bg-gray-900 transition shadow-sm">Login</Link>
+                                <Link href="/login" className="px-5 py-2 bg-gray-800 text-white text-sm rounded-md font-bold hover:bg-gray-900 transition shadow-sm">Login</Link>
                             )}
                         </div>
                     </div>
@@ -148,7 +148,7 @@ export default function PublicLayout({ children, profil, auth }) {
                             {auth?.user ? (
                                 <Link href={route('admin.dashboard')} className="block text-center py-2.5 bg-green-600 text-white rounded-md font-bold text-xs" onClick={() => setIsOpen(false)}>Panel Admin</Link>
                             ) : (
-                                <Link href={route('login')} className="block text-center py-2.5 bg-gray-800 text-white rounded-md font-bold text-xs" onClick={() => setIsOpen(false)}>Login</Link>
+                                <Link href="/login" className="block text-center py-2.5 bg-gray-800 text-white rounded-md font-bold text-xs" onClick={() => setIsOpen(false)}>Login</Link>
                             )}
                         </div>
                     </div>
@@ -160,7 +160,7 @@ export default function PublicLayout({ children, profil, auth }) {
                 {children}
             </main>
 
-            {/* --- FOOTER BARU PERSIS SEPERTI ARSIP LAMA (Tanpa Arsip, 2 Kolom Rapi) --- */}
+            {/* --- FOOTER UTUH --- */}
             <footer className="bg-[#333333] text-gray-300 pt-12 pb-6 px-4 lg:px-16 mt-auto border-t-4 border-gray-700">
                 <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-12 mb-8">
                     

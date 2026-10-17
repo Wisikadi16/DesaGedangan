@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { Head, Link } from '@inertiajs/react';
+import { Head } from '@inertiajs/react';
+import PublicLayout from '@/Layouts/PublicLayout';
 
 export default function Potensi({ title, potensi }) {
     const [expandedId, setExpandedId] = useState(null);
@@ -9,29 +10,10 @@ export default function Potensi({ title, potensi }) {
     };
 
     return (
-        <div className="min-h-screen bg-gray-50 flex flex-col justify-between">
+        <PublicLayout>
             <Head title={title} />
-
-            {/* Navbar Sederhana / Standar Publik */}
-            <nav className="bg-white border-b border-gray-100 shadow-sm sticky top-0 z-50">
-                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex justify-between items-center">
-                    <Link href="/" className="text-2xl font-black text-green-700 tracking-tight">
-                        Desa Gedangan
-                    </Link>
-                    <div className="space-x-6 text-sm font-bold text-gray-700 hidden md:flex">
-                        <Link href="/" className="hover:text-green-600 transition">Beranda</Link>
-                        <Link href="/profil" className="hover:text-green-600 transition">Profil</Link>
-                        <Link href="/berita" className="hover:text-green-600 transition">Berita</Link>
-                        <Link href="/umkm" className="hover:text-green-600 transition">UMKM Warga</Link>
-                        <Link href="/desa-wisata" className="hover:text-green-600 transition">Desa Wisata</Link>
-                    </div>
-                    <Link href="/admin/dashboard" className="px-4 py-2 bg-green-600 text-white font-bold text-xs rounded-xl hover:bg-green-700 transition shadow-sm">
-                        Panel Admin
-                    </Link>
-                </div>
-            </nav>
             
-            {/* Header Halaman Utama */}
+            {/* Header Halaman */}
             <div className="bg-gradient-to-r from-green-800 to-green-600 py-16 text-center shadow-inner">
                 <div className="max-w-4xl mx-auto px-4">
                     <h1 className="text-4xl font-black text-white mb-3 tracking-wide">{title}</h1>
@@ -42,7 +24,7 @@ export default function Potensi({ title, potensi }) {
             </div>
 
             {/* Konten Utama List Berita/Artikel */}
-            <div className="max-w-4xl mx-auto px-4 my-12 w-full flex-1 sm:px-6 lg:px-8">
+            <div className="max-w-4xl mx-auto px-4 my-12 w-full sm:px-6 lg:px-8">
                 <div className="space-y-8">
                     {potensi && potensi.length > 0 ? (
                         potensi.map((item) => {
@@ -113,11 +95,6 @@ export default function Potensi({ title, potensi }) {
                     )}
                 </div>
             </div>
-
-            {/* Footer Sederhana */}
-            <footer className="bg-white border-t border-gray-100 py-8 text-center text-xs text-gray-400 mt-20">
-                <p>&copy; 2026 Pemerintah Desa Gedangan, Kecamatan Tuntang, Kabupaten Semarang. All rights reserved.</p>
-            </footer>
-        </div>
+        </PublicLayout>
     );
 }
