@@ -235,10 +235,10 @@ export default function ProfilDesa({ profil, perangkat, dusun, auth }) {
                                 </div>
                             </div>
 
-                            {/* Tabel Data Penduduk menggunakan Grid 2 Kolom dengan Tinggi Sejajar */}
-                            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-stretch">
+                            {/* Tabel Data Penduduk Aman Tanpa Nabrak */}
+                            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
                                 
-                                {/* KOTAK KIRI: Tabel Kelompok Umur (PENGUASA TINGGI - Biarkan natural ke bawah) */}
+                                {/* KOTAK KIRI: Tabel Kelompok Usia */}
                                 <div className="bg-white rounded-3xl border border-gray-100 shadow-sm overflow-hidden flex flex-col">
                                     <div className="bg-gray-50/80 border-b border-gray-100 px-6 py-4">
                                         <h3 className="font-bold text-gray-900 text-lg">Kelompok Usia</h3>
@@ -269,29 +269,55 @@ export default function ProfilDesa({ profil, perangkat, dusun, auth }) {
                                     </div>
                                 </div>
 
-                                {/* KOTAK KANAN: Mengikuti Tinggi Kotak Kiri Secara Presisi */}
-                                <div className="lg:relative w-full h-full">
-                                    {/* 'absolute inset-0' ini kuncinya biar kanan gak maksa kiri buat melar */}
-                                    <div className="lg:absolute lg:inset-0 flex flex-col gap-8 h-full">
-                                        
-                                        {/* ATAS KANAN: Tabel Agama */}
-                                        <div className="bg-white rounded-3xl border border-gray-100 shadow-sm overflow-hidden shrink-0">
-                                            <div className="bg-gray-50/80 border-b border-gray-100 px-6 py-4">
-                                                <h3 className="font-bold text-gray-900 text-lg">Agama Penduduk</h3>
-                                            </div>
+                                {/* KOTAK KANAN: Tabel Agama & Mata Pencaharian */}
+                                <div className="flex flex-col gap-8 w-full">
+                                    
+                                    {/* ATAS KANAN: Tabel Agama */}
+                                    <div className="bg-white rounded-3xl border border-gray-100 shadow-sm overflow-hidden">
+                                        <div className="bg-gray-50/80 border-b border-gray-100 px-6 py-4">
+                                            <h3 className="font-bold text-gray-900 text-lg">Agama Penduduk</h3>
+                                        </div>
+                                        <table className="w-full text-sm text-left text-gray-600">
+                                            <thead className="text-xs text-gray-700 uppercase bg-gray-50">
+                                                <tr>
+                                                    <th className="px-6 py-2.5">Agama</th>
+                                                    <th className="px-6 py-2.5 text-right">Jumlah</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody className="divide-y divide-gray-100">
+                                                {profil?.agama && profil.agama.length > 0 ? (
+                                                    profil.agama.map((item, index) => (
+                                                        <tr key={index} className="hover:bg-gray-50/50">
+                                                            <td className="px-6 py-2.5 font-medium text-gray-900">{item.nama}</td>
+                                                            <td className="px-6 py-2.5 text-right font-bold text-green-700">{formatAngka(item.jumlah)} Jiwa</td>
+                                                        </tr>
+                                                    ))
+                                                ) : (
+                                                    <tr><td colSpan="2" className="px-6 py-6 text-center italic text-gray-400">Data belum tersedia</td></tr>
+                                                )}
+                                            </tbody>
+                                        </table>
+                                    </div>
+
+                                    {/* BAWAH KANAN: Tabel Pekerjaan */}
+                                    <div className="bg-white rounded-3xl border border-gray-100 shadow-sm overflow-hidden flex flex-col">
+                                        <div className="bg-gray-50/80 border-b border-gray-100 px-6 py-4 shrink-0">
+                                            <h3 className="font-bold text-gray-900 text-lg">Mata Pencaharian</h3>
+                                        </div>
+                                        <div className="overflow-x-auto px-2 pb-2">
                                             <table className="w-full text-sm text-left text-gray-600">
-                                                <thead className="text-xs text-gray-700 uppercase bg-gray-50">
+                                                <thead className="text-xs text-gray-700 uppercase bg-gray-50 sticky top-0 z-10">
                                                     <tr>
-                                                        <th className="px-6 py-2.5">Agama</th>
-                                                        <th className="px-6 py-2.5 text-right">Jumlah</th>
+                                                        <th className="px-6 py-2.5 rounded-l-xl">Jenis Pekerjaan</th>
+                                                        <th className="px-6 py-2.5 text-right rounded-r-xl">Jumlah</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody className="divide-y divide-gray-100">
-                                                    {profil?.agama && profil.agama.length > 0 ? (
-                                                        profil.agama.map((item, index) => (
+                                                    {profil?.pekerjaan && profil.pekerjaan.length > 0 ? (
+                                                        profil.pekerjaan.map((item, index) => (
                                                             <tr key={index} className="hover:bg-gray-50/50">
                                                                 <td className="px-6 py-2.5 font-medium text-gray-900">{item.nama}</td>
-                                                                <td className="px-6 py-2.5 text-right font-bold text-green-700">{formatAngka(item.jumlah)} Jiwa</td>
+                                                                <td className="px-6 py-2.5 text-right font-bold text-green-700">{formatAngka(item.jumlah)}</td>
                                                             </tr>
                                                         ))
                                                     ) : (
@@ -299,35 +325,6 @@ export default function ProfilDesa({ profil, perangkat, dusun, auth }) {
                                                     )}
                                                 </tbody>
                                             </table>
-                                        </div>
-
-                                        {/* BAWAH KANAN: Tabel Pekerjaan (Isinya di-scroll, mentok rata sama kotak Usia) */}
-                                        <div className="bg-white rounded-3xl border border-gray-100 shadow-sm overflow-hidden flex-1 flex flex-col min-h-0">
-                                            <div className="bg-gray-50/80 border-b border-gray-100 px-6 py-4 shrink-0">
-                                                <h3 className="font-bold text-gray-900 text-lg">Mata Pencaharian</h3>
-                                            </div>
-                                            <div className="overflow-x-auto px-2 pb-2 flex-1 overflow-y-auto min-h-0">
-                                                <table className="w-full text-sm text-left text-gray-600">
-                                                    <thead className="text-xs text-gray-700 uppercase bg-gray-50 sticky top-0 z-10">
-                                                        <tr>
-                                                            <th className="px-6 py-2.5 rounded-l-xl">Jenis Pekerjaan</th>
-                                                            <th className="px-6 py-2.5 text-right rounded-r-xl">Jumlah</th>
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody className="divide-y divide-gray-100">
-                                                        {profil?.pekerjaan && profil.pekerjaan.length > 0 ? (
-                                                            profil.pekerjaan.map((item, index) => (
-                                                                <tr key={index} className="hover:bg-gray-50/50">
-                                                                    <td className="px-6 py-2.5 font-medium text-gray-900">{item.nama}</td>
-                                                                    <td className="px-6 py-2.5 text-right font-bold text-green-700">{formatAngka(item.jumlah)}</td>
-                                                                </tr>
-                                                            ))
-                                                        ) : (
-                                                            <tr><td colSpan="2" className="px-6 py-6 text-center italic text-gray-400">Data belum tersedia</td></tr>
-                                                        )}
-                                                    </tbody>
-                                                </table>
-                                            </div>
                                         </div>
                                     </div>
                                 </div>
