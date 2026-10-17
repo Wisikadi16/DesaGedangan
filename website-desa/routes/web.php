@@ -10,6 +10,7 @@ use App\Http\Controllers\ProfilPublikController;
 use App\Http\Controllers\Admin\DesaWisataController as AdminDesaWisataController;
 use App\Http\Controllers\Admin\SyaratPelayananController as AdminSyaratPelayananController;
 use App\Http\Controllers\Admin\LayananSmardController as AdminLayananSmardController;
+use App\Http\Controllers\Admin\PotensiDesaController as AdminPotensiDesaController;
 use App\Models\News;
 use App\Models\VillageProfile;
 use App\Models\DesaWisata;
@@ -55,10 +56,29 @@ Route::get('/desa-online/smard', function () {
     ]);
 })->name('online.smard');
 
-// Potensi, Transparansi, dll
-Route::get('/potensi/pariwisata', fn() => Inertia::render('Blank', ['title' => 'Potensi Pariwisata']))->name('potensi.pariwisata');
-Route::get('/potensi/pasar-desa', fn() => Inertia::render('Blank', ['title' => 'Pasar Desa']))->name('potensi.pasar');
-Route::get('/potensi/kesenian', fn() => Inertia::render('Blank', ['title' => 'Kesenian Daerah']))->name('potensi.kesenian');
+// Potensi Desa (Publik)
+Route::get('/potensi/pariwisata', function () {
+    return Inertia::render('Potensi', [
+        'title' => 'Potensi Pariwisata',
+        'potensi' => \App\Models\PotensiDesa::where('kategori', 'Pariwisata')->latest('tanggal')->get()
+    ]);
+})->name('potensi.pariwisata');
+
+Route::get('/potensi/pasar-desa', function () {
+    return Inertia::render('Potensi', [
+        'title' => 'Pasar Desa',
+        'potensi' => \App\Models\PotensiDesa::where('kategori', 'Pasar Desa')->latest('tanggal')->get()
+    ]);
+})->name('potensi.pasar');
+
+Route::get('/potensi/kesenian', function () {
+    return Inertia::render('Potensi', [
+        'title' => 'Kesenian Daerah',
+        'potensi' => \App\Models\PotensiDesa::where('kategori', 'Kesenian')->latest('tanggal')->get()
+    ]);
+})->name('potensi.kesenian');
+
+// Transparansi, dll
 Route::get('/transparansi/apbdes', fn() => Inertia::render('Blank', ['title' => 'Laporan APBDes']))->name('transparansi.apbdes');
 Route::get('/transparansi/realisasi', fn() => Inertia::render('Blank', ['title' => 'Realisasi Anggaran']))->name('transparansi.realisasi');
 Route::get('/buku-tamu', fn() => Inertia::render('Blank', ['title' => 'Buku Tamu']))->name('buku-tamu');
@@ -78,6 +98,9 @@ Route::middleware(['auth', 'verified'])->prefix('admin')->name('admin.')->group(
     // Kelola Layanan Berbasis SMARD
     Route::get('/layanan-smard', [AdminLayananSmardController::class, 'index'])->name('layanan-smard.index');
     Route::post('/layanan-smard', [AdminLayananSmardController::class, 'update'])->name('layanan-smard.update');
+
+    // Kelola Potensi Desa (Pariwisata, Pasar, Kesenian)
+    Route::resource('/potensi-desa', AdminPotensiDesaController::class)->except(['show', 'create', 'edit']);
 
     Route::resource('/berita', BeritaController::class)->except('show');
     Route::resource('/umkm', UmkmController::class)->except('show');

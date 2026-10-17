@@ -15,7 +15,8 @@ const NAV = [
     { label: 'Dusun', url: '/admin/dusun', match: 'admin.dusun.*' },
     { label: 'Desa Wisata', url: '/admin/desa-wisata', match: 'admin.desa-wisata*' },
     { label: 'Syarat Pelayanan', url: '/admin/syarat-pelayanan', match: 'admin.syarat-pelayanan*' },
-    { label: 'Layanan SMARD', url: '/admin/layanan-smard', match: 'admin.layanan-smard*' }, // 👈 Menu Layanan SMARD ditambahkan di sini
+    { label: 'Layanan SMARD', url: '/admin/layanan-smard', match: 'admin.layanan-smard*' },
+    { label: 'Potensi Desa', url: '/admin/potensi-desa', match: 'admin.potensi-desa*' },
 ];
 
 export default function AuthenticatedLayout({ header, children }) {
@@ -37,15 +38,17 @@ export default function AuthenticatedLayout({ header, children }) {
         <div className="min-h-screen bg-gray-100">
             <nav className="border-b border-gray-100 bg-white">
                 <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-                    <div className="flex h-16 justify-between">
-                        <div className="flex">
+                    {/* H-16 diganti jadi min-h biar bisa turun ke bawah kalau menu kepanjangan */}
+                    <div className="flex justify-between min-h-[4rem] py-2">
+                        <div className="flex flex-1">
                             <div className="flex shrink-0 items-center">
                                 <Link href="/">
                                     <ApplicationLogo className="block h-9 w-auto fill-current text-gray-800" />
                                 </Link>
                             </div>
 
-                            <div className="hidden space-x-6 lg:-my-px lg:ms-8 lg:flex">
+                            {/* Ditambah flex-wrap dan space-x diperkecil biar muat */}
+                            <div className="hidden space-x-4 lg:-my-px lg:ms-6 lg:flex lg:flex-wrap lg:items-center">
                                 {NAV.map((item) => (
                                     <NavLink key={item.label} href={item.url} active={route().current(item.match)}>
                                         {item.label}
@@ -54,7 +57,8 @@ export default function AuthenticatedLayout({ header, children }) {
                             </div>
                         </div>
 
-                        <div className="hidden lg:ms-6 lg:flex lg:items-center">
+                        {/* Ditambah shrink-0 biar tombol dropdown admin gak kegeser menu */}
+                        <div className="hidden lg:ms-6 lg:flex lg:items-center shrink-0">
                             <Link href="/" className="text-sm text-gray-500 hover:text-green-700 me-4">
                                 Lihat Website &rarr;
                             </Link>
