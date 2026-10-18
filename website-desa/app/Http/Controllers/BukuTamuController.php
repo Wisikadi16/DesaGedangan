@@ -13,7 +13,9 @@ class BukuTamuController extends Controller
     public function index(Request $request)
     {
         return Inertia::render('BukuTamu', [
-            'auth' => $request->user(),
+            'auth' => [
+                'user' => $request->user(),
+            ],
             'profil' => VillageProfile::first(),
             'pesanTerbaru' => BukuTamu::latest()->get()
         ]);

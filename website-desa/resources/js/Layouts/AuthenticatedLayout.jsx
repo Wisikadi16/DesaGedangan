@@ -18,6 +18,7 @@ const NAV = [
     { label: 'Layanan SMARD', url: '/admin/layanan-smard', match: 'admin.layanan-smard*' },
     { label: 'Potensi Desa', url: '/admin/potensi-desa', match: 'admin.potensi-desa*' },
     { label: 'Transparansi', url: '/admin/transparansi', match: 'admin.transparansi.*' },
+    { label: 'Buku Tamu', url: '/admin/buku-tamu', match: 'admin.buku-tamu*' },
 ];
 
 export default function AuthenticatedLayout({ header, children }) {
@@ -41,17 +42,17 @@ export default function AuthenticatedLayout({ header, children }) {
                 <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
                     {/* H-16 diganti jadi min-h biar bisa turun ke bawah kalau menu kepanjangan */}
                     <div className="flex justify-between min-h-[4rem] py-2">
-                        <div className="flex flex-1">
+                        <div className="flex flex-1 items-center">
                             <div className="flex shrink-0 items-center">
                                 <Link href="/">
                                     <ApplicationLogo className="block h-9 w-auto fill-current text-gray-800" />
                                 </Link>
                             </div>
 
-                            {/* Ditambah flex-wrap dan space-x diperkecil biar muat */}
-                            <div className="hidden space-x-4 lg:-my-px lg:ms-6 lg:flex lg:flex-wrap lg:items-center">
+                            {/* Spasi dan ukuran font diperkecil sedikit agar muat banyak menu */}
+                            <div className="hidden space-x-2 lg:-my-px lg:ms-4 lg:flex lg:flex-wrap lg:items-center">
                                 {NAV.map((item) => (
-                                    <NavLink key={item.label} href={item.url} active={route().current(item.match)}>
+                                    <NavLink key={item.label} href={item.url} active={route().current(item.match)} className="text-xs lg:text-sm px-1 py-1">
                                         {item.label}
                                     </NavLink>
                                 ))}
@@ -59,11 +60,11 @@ export default function AuthenticatedLayout({ header, children }) {
                         </div>
 
                         {/* Ditambah shrink-0 biar tombol dropdown admin gak kegeser menu */}
-                        <div className="hidden lg:ms-6 lg:flex lg:items-center shrink-0">
-                            <Link href="/" className="text-sm text-gray-500 hover:text-green-700 me-4">
+                        <div className="hidden lg:ms-4 lg:flex lg:items-center shrink-0">
+                            <Link href="/" className="text-xs lg:text-sm text-gray-500 hover:text-green-700 me-3">
                                 Lihat Website &rarr;
                             </Link>
-                            <div className="relative ms-3">
+                            <div className="relative ms-2">
                                 <Dropdown>
                                     <Dropdown.Trigger>
                                         <span className="inline-flex rounded-md">
