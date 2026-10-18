@@ -9,9 +9,5 @@ class Dusun extends Model
 {
     use HasFactory;
 
-    protected $fillable = [
-        'nama_dusun', 
-        'nama_kepala_dusun', 
-        'deskripsi'
-    ];
+    protected $guarded = ['id'];
 }

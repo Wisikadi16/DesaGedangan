@@ -9,10 +9,5 @@ class VillageOfficial extends Model
 {
     use HasFactory;
 
-    protected $fillable = [
-        'nama', 
-        'jabatan', 
-        'foto_path', 
-        'urutan'
-    ];
+    protected $guarded = ['id'];
 }

@@ -5,7 +5,7 @@ use App\Http\Controllers\Admin\DusunController;
 use App\Http\Controllers\Admin\PerangkatController;
 use App\Http\Controllers\Admin\ProfilController;
 use App\Http\Controllers\Admin\UmkmController;
-// Tambahan Import Transparansi Controller
+use App\Http\Controllers\BukuTamuController;
 use App\Http\Controllers\Admin\TransparansiController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ProfilPublikController;
@@ -83,9 +83,11 @@ Route::get('/potensi/kesenian', function () {
     ]);
 })->name('potensi.kesenian');
 
-// Lain-lain
-Route::get('/buku-tamu', fn() => Inertia::render('Blank', ['title' => 'Buku Tamu']))->name('buku-tamu');
+// Buku Tamu & Kontak (Publik)
+Route::get('/buku-tamu', [BukuTamuController::class, 'index'])->name('buku-tamu');
+Route::post('/buku-tamu', [BukuTamuController::class, 'store'])->name('buku-tamu.store');
 Route::get('/kontak', fn() => Inertia::render('Blank', ['title' => 'Kontak Kami']))->name('kontak');
+
 
 // 4. HALAMAN ADMIN
 Route::middleware(['auth', 'verified'])->prefix('admin')->name('admin.')->group(function () {
@@ -108,6 +110,11 @@ Route::middleware(['auth', 'verified'])->prefix('admin')->name('admin.')->group(
     // Kelola Modul Utama
     Route::resource('/berita', BeritaController::class)->except('show');
     Route::resource('/umkm', UmkmController::class)->except('show');
+
+    // Admin Buku Tamu (Melihat, Membalas & Menghapus Pesan Masuk)
+    Route::get('/buku-tamu', [BukuTamuController::class, 'adminIndex'])->name('buku-tamu.index');
+    Route::put('/buku-tamu/{id}', [BukuTamuController::class, 'update'])->name('buku-tamu.update');
+    Route::delete('/buku-tamu/{id}', [BukuTamuController::class, 'destroy'])->name('buku-tamu.destroy');
     
     // Tambahan Resource Admin Transparansi
     Route::resource('/transparansi', TransparansiController::class)->except('show');
@@ -118,7 +125,7 @@ Route::middleware(['auth', 'verified'])->prefix('admin')->name('admin.')->group(
     Route::resource('/dusun', DusunController::class)->except('show');
 });
 
-// Auth
+// Auth User Profile
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
