@@ -17,6 +17,7 @@ const NAV = [
     { label: 'Syarat Pelayanan', url: '/admin/syarat-pelayanan', match: 'admin.syarat-pelayanan*' },
     { label: 'Layanan SMARD', url: '/admin/layanan-smard', match: 'admin.layanan-smard*' },
     { label: 'Potensi Desa', url: '/admin/potensi-desa', match: 'admin.potensi-desa*' },
+    { label: 'Transparansi', url: '/admin/transparansi', match: 'admin.transparansi.*' },
 ];
 
 export default function AuthenticatedLayout({ header, children }) {

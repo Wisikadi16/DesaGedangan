@@ -5,6 +5,8 @@ use App\Http\Controllers\Admin\DusunController;
 use App\Http\Controllers\Admin\PerangkatController;
 use App\Http\Controllers\Admin\ProfilController;
 use App\Http\Controllers\Admin\UmkmController;
+// Tambahan Import Transparansi Controller
+use App\Http\Controllers\Admin\TransparansiController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ProfilPublikController;
 use App\Http\Controllers\Admin\DesaWisataController as AdminDesaWisataController;
@@ -30,10 +32,13 @@ Route::get('/', function () {
 // 2. HALAMAN PROFIL
 Route::get('/profil', [ProfilPublikController::class, 'index'])->name('profil.index');
 
-// 3. HALAMAN PUBLIK (Berita, UMKM, Desa Wisata, Syarat Pelayanan, Layanan SMARD)
+// 3. HALAMAN PUBLIK (Berita, UMKM, Desa Wisata, Syarat Pelayanan, Layanan SMARD, Transparansi)
 Route::get('/berita', [BeritaController::class, 'publicIndex'])->name('berita');
 Route::get('/berita/{id}', [BeritaController::class, 'show'])->whereNumber('id')->name('berita.show');
 Route::get('/umkm', [UmkmController::class, 'publicIndex'])->name('umkm.index');
+
+// Transparansi Publik
+Route::get('/transparansi', [TransparansiController::class, 'publicIndex'])->name('transparansi.index');
 
 Route::get('/desa-wisata', function () {
     return Inertia::render('DesaWisata', [
@@ -78,14 +83,7 @@ Route::get('/potensi/kesenian', function () {
     ]);
 })->name('potensi.kesenian');
 
-// Transparansi, dll
-// Transparansi Tunggal (Direct Link)
-Route::get('/transparansi', function () {
-    return Inertia::render('Blank', [
-        'title' => 'Transparansi Desa',
-        'profil' => VillageProfile::first(),
-    ]);
-})->name('transparansi.index');
+// Lain-lain
 Route::get('/buku-tamu', fn() => Inertia::render('Blank', ['title' => 'Buku Tamu']))->name('buku-tamu');
 Route::get('/kontak', fn() => Inertia::render('Blank', ['title' => 'Kontak Kami']))->name('kontak');
 
@@ -107,8 +105,13 @@ Route::middleware(['auth', 'verified'])->prefix('admin')->name('admin.')->group(
     // Kelola Potensi Desa (Pariwisata, Pasar, Kesenian)
     Route::resource('/potensi-desa', AdminPotensiDesaController::class)->except(['show', 'create', 'edit']);
 
+    // Kelola Modul Utama
     Route::resource('/berita', BeritaController::class)->except('show');
     Route::resource('/umkm', UmkmController::class)->except('show');
+    
+    // Tambahan Resource Admin Transparansi
+    Route::resource('/transparansi', TransparansiController::class)->except('show');
+    
     Route::get('/profil', [ProfilController::class, 'index'])->name('profil.index');
     Route::post('/profil', [ProfilController::class, 'update'])->name('profil.update');
     Route::resource('/pemerintahan', PerangkatController::class)->except('show');
