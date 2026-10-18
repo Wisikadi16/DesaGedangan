@@ -79,8 +79,13 @@ Route::get('/potensi/kesenian', function () {
 })->name('potensi.kesenian');
 
 // Transparansi, dll
-Route::get('/transparansi/apbdes', fn() => Inertia::render('Blank', ['title' => 'Laporan APBDes']))->name('transparansi.apbdes');
-Route::get('/transparansi/realisasi', fn() => Inertia::render('Blank', ['title' => 'Realisasi Anggaran']))->name('transparansi.realisasi');
+// Transparansi Tunggal (Direct Link)
+Route::get('/transparansi', function () {
+    return Inertia::render('Blank', [
+        'title' => 'Transparansi Desa',
+        'profil' => VillageProfile::first(),
+    ]);
+})->name('transparansi.index');
 Route::get('/buku-tamu', fn() => Inertia::render('Blank', ['title' => 'Buku Tamu']))->name('buku-tamu');
 Route::get('/kontak', fn() => Inertia::render('Blank', ['title' => 'Kontak Kami']))->name('kontak');
 

@@ -50,12 +50,8 @@ export default function PublicLayout({ children, profil }) {
                             </li>
 
                             {/* Dropdown Transparansi */}
-                            <li className="relative group h-full flex items-center">
-                                <span className="cursor-pointer hover:text-green-600 transition h-full flex items-center">Transparansi ▾</span>
-                                <ul className="absolute top-full left-0 w-48 bg-white border-t-2 border-green-600 shadow-xl hidden group-hover:block z-50">
-                                    <li><Link href={route('transparansi.apbdes')} className="block px-4 py-3 hover:bg-green-50 hover:text-green-700 border-b text-sm">APBDes</Link></li>
-                                    <li><Link href={route('transparansi.realisasi')} className="block px-4 py-3 hover:bg-green-50 hover:text-green-700 text-sm">Realisasi Anggaran</Link></li>
-                                </ul>
+                            <li className="h-full flex items-center">
+                                <Link href={route('transparansi.index')} className="hover:text-green-600 transition">Transparansi</Link>
                             </li>
 
                             {/* Dropdown Desa Online */}
@@ -125,13 +121,7 @@ export default function PublicLayout({ children, profil }) {
                             </div>
                         </div>
 
-                        <div className="py-2 border-t border-gray-100 space-y-1">
-                            <span className="text-xs uppercase tracking-wider text-green-700 font-bold block mb-1">Transparansi</span>
-                            <div className="pl-3 flex flex-col space-y-1 text-xs">
-                                <Link href={route('transparansi.apbdes')} onClick={() => setIsOpen(false)} className="text-gray-600 py-1 block">Laporan APBDes</Link>
-                                <Link href={route('transparansi.realisasi')} onClick={() => setIsOpen(false)} className="text-gray-600 py-1 block">Realisasi Anggaran</Link>
-                            </div>
-                        </div>
+                        <Link href={route('transparansi.index')} className="block py-2 text-gray-700 border-t border-gray-100" onClick={() => setIsOpen(false)}>Transparansi</Link>
 
                         <div className="py-2 border-t border-gray-100 space-y-1">
                             <span className="text-xs uppercase tracking-wider text-green-700 font-bold block mb-1">Desa Online</span>
