@@ -73,11 +73,11 @@ export default function ProfilDesa({ profil, perangkat, dusun, auth }) {
                                 {daftarPerangkat.map((p, index) => (
                                     <div key={index} className="bg-white rounded-3xl shadow-sm border border-gray-100 overflow-hidden text-center hover:shadow-md transition duration-300 group">
                                         <div className="h-56 bg-green-50 flex items-center justify-center overflow-hidden relative">
-                                            {p.foto_path ? (
-                                                <img src={`/storage/${p.foto_path}`} alt={p.nama} className="w-full h-full object-cover group-hover:scale-105 transition duration-500" />
-                                            ) : (
-                                                <span className="text-6xl">👨‍💼</span>
-                                            )}
+                                            {p.foto ? (
+                                            <img src={`/storage/${p.foto}`} alt={p.nama} className="w-full h-full object-cover group-hover:scale-105 transition duration-500" />
+                                        ) : (
+                                            <span className="text-6xl">👨‍💼</span>
+                                        )}
                                         </div>
                                         <div className="p-6">
                                             <h4 className="font-extrabold text-lg text-gray-900 mb-1">{p.nama}</h4>

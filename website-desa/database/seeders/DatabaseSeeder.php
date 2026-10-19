@@ -15,11 +15,17 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
         // 1. Buat Akun Admin Desa
-        User::create([
-            'name' => 'Admin Desa Gedangan',
-            'email' => 'admin@gedangan.desa.id',
-            'password' => Hash::make('password123'), // Ini password buat login nanti
-        ]);
+        // Password dibaca dari .env (ADMIN_PASSWORD). Kalau kosong, dibuat acak dan ditampilkan SEKALI di terminal.
+        $password = env('ADMIN_PASSWORD') ?: Str::random(14);
+
+        $admin = User::firstOrCreate(
+            ['email' => 'admin@gedangan.desa.id'],
+            ['name' => 'Admin Desa Gedangan', 'password' => Hash::make($password)]
+        );
+
+        if ($admin->wasRecentlyCreated) {
+            $this->command?->info("Akun admin dibuat -> email: admin@gedangan.desa.id | password: {$password}");
+        }
 
         // 2. Buat Profil Desa Default
         VillageProfile::create([
