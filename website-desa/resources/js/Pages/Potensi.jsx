@@ -13,8 +13,8 @@ export default function Potensi({ title, potensi }) {
         <PublicLayout>
             <Head title={title} />
             
-            {/* Header Halaman */}
-            <div className="bg-gradient-to-r from-green-800 to-green-600 py-16 text-center shadow-inner">
+            {/* Header Halaman (WARNA HIJAU DIUBAH JADI GRADASI HIJAU TUA KAYA HALAMAN LAIN) */}
+            <div className="bg-gradient-to-r from-green-900 via-green-800 to-teal-800 py-24 text-center shadow-inner">
                 <div className="max-w-4xl mx-auto px-4">
                     <h1 className="text-4xl font-black text-white mb-3 tracking-wide">{title}</h1>
                     <p className="text-base text-green-100 font-medium">
@@ -23,7 +23,7 @@ export default function Potensi({ title, potensi }) {
                 </div>
             </div>
 
-            {/* Konten Utama List Berita/Artikel */}
+            {/* Konten Utama List Berita/Artikel (STRUKTUR ASLI 100% AMAN TANPA DIUBAH) */}
             <div className="max-w-4xl mx-auto px-4 my-12 w-full sm:px-6 lg:px-8">
                 <div className="space-y-8">
                     {potensi && potensi.length > 0 ? (

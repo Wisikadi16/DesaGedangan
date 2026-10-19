@@ -86,8 +86,6 @@ Route::get('/potensi/kesenian', function () {
 // Buku Tamu & Kontak (Publik)
 Route::get('/buku-tamu', [BukuTamuController::class, 'index'])->name('buku-tamu');
 Route::post('/buku-tamu', [BukuTamuController::class, 'store'])->name('buku-tamu.store');
-Route::get('/kontak', fn() => Inertia::render('Blank', ['title' => 'Kontak Kami']))->name('kontak');
-
 
 // 4. HALAMAN ADMIN
 Route::middleware(['auth', 'verified'])->prefix('admin')->name('admin.')->group(function () {
