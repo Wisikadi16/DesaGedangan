@@ -64,7 +64,7 @@ export default function PublicLayout({ children, profil }) {
                             </li>
 
                             <li className="h-full flex items-center"><Link href={route('buku-tamu')} className="hover:text-green-600 transition">Buku Tamu</Link></li>
-                            <li className="h-full flex items-center"><Link href={route('kontak')} className="hover:text-green-600 transition">Kontak</Link></li>
+                            {/*<li className="h-full flex items-center"><Link href={route('kontak')} className="hover:text-green-600 transition">Kontak</Link></li>*/}
                         </ul>
 
                         {/* Tombol Login / Panel Admin Desktop */}
@@ -132,7 +132,7 @@ export default function PublicLayout({ children, profil }) {
                         </div>
 
                         <Link href={route('buku-tamu')} className="block py-2 text-gray-700 border-t border-gray-100" onClick={() => setIsOpen(false)}>Buku Tamu</Link>
-                        <Link href={route('kontak')} className="block py-2 text-gray-700" onClick={() => setIsOpen(false)}>Kontak</Link>
+                         {/*<Link href={route('kontak')} className="block py-2 text-gray-700" onClick={() => setIsOpen(false)}>Kontak</Link>*/}
                         
                         <div className="pt-3 border-t border-gray-100 pb-4">
                             {auth?.user ? (
@@ -172,7 +172,7 @@ export default function PublicLayout({ children, profil }) {
                             REDAKSI
                         </h4>
                         <div className="space-y-1.5 text-xs text-gray-300 leading-relaxed">
-                            <p><strong className="text-white">Penanggung Jawab :</strong> Kepala Desa Gedangan: DAROJI</p>
+                            <p><strong className="text-white">Penanggung Jawab :</strong> Seketaris Kecamatan : Zakiyah Farida, SE., MSi</p>
                             <p><strong className="text-white">Alamat Redaksi :</strong> Jl. Salatiga - Banyubiru Desa Gedangan Kec. Tuntang Kab. Semarang Jawa Tengah 50773</p>
                             <p><strong className="text-white">Telephone:</strong> (0298) 6031115</p>
                             <p><strong className="text-white">Email:</strong> pemerintahdesagedangan@gmail.com</p>
@@ -185,7 +185,8 @@ export default function PublicLayout({ children, profil }) {
 
                 {/* Copyright Bawah */}
                 <div className="max-w-7xl mx-auto pt-6 border-t border-gray-700 text-center text-xs text-gray-400">
-                    Hak Cipta &copy; 2025 DESA GEDANGAN. Tema: ColorNews oleh ThemeGrill. Dipersembahkan oleh WordPress.
+                © 2026 Pemerintah Desa Gedangan. Hak Cipta Dilindungi.  
+                Dikembangkan oleh Tim Pengembang Website Desa Gedangan & Mahasiswa KKN UNNES GIAT 17 Desa Gedangan .                
                 </div>
             </footer>
         </div>
