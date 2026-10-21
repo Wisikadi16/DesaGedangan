@@ -1,14 +1,23 @@
+import React, { useState } from 'react';
 import { Head } from '@inertiajs/react';
 import PublicLayout from '@/Layouts/PublicLayout';
 import { formatAngka } from '@/utils/format';
 
-export default function ProfilDesa({ profil, perangkat, dusun, auth }) {
+export default function ProfilDesa({ profil, perangkat, bpd, lkmd, tpk, pkk, rtrw, dusun, auth }) {
     const namaDesa = profil?.nama_desa || 'Desa Gedangan';
     const daftarPerangkat = perangkat || [];
+    const daftarBpd = bpd || [];
+    const daftarLkmd = lkmd || [];
+    const daftarTpk = tpk || [];
+    const daftarPkk = pkk || [];
+    const daftarRtRw = rtrw || [];
     const daftarDusun = dusun || [];
+    
     const laki = Number(profil?.jumlah_laki_laki || 0);
     const perempuan = Number(profil?.jumlah_perempuan || 0);
     const kk = Number(profil?.jumlah_kk || 0);
+
+    const [activeTab, setActiveTab] = useState('perangkat');
 
     return (
         <PublicLayout profil={profil} auth={auth}>
@@ -60,37 +69,177 @@ export default function ProfilDesa({ profil, perangkat, dusun, auth }) {
                         </div>
                     </section>
 
-                    {/* 2. PEMERINTAHAN DESA */}
+                    {/* 2. PEMERINTAHAN DESA & TAB LEMBAGA */}
                     <section id="pemerintahan" className="scroll-mt-28">
-                        <div className="text-center max-w-2xl mx-auto mb-12">
+                        <div className="text-center max-w-2xl mx-auto mb-10">
                             <span className="text-green-700 font-bold text-xs uppercase tracking-widest bg-green-50 px-3 py-1 rounded-md">Aparatur Desa</span>
-                            <h2 className="text-3xl font-extrabold text-gray-900 mt-2">Pemerintahan Desa</h2>
-                            <p className="text-gray-500 text-sm mt-1">Struktur organisasi dan jajaran perangkat desa.</p>
+                            <h2 className="text-3xl font-extrabold text-gray-900 mt-2">Pemerintahan Desa & Lembaga</h2>
+                            <p className="text-gray-500 text-sm mt-1">Struktur organisasi, jajaran perangkat, dan lembaga kemasyarakatan desa.</p>
                         </div>
 
-                        {daftarPerangkat.length > 0 ? (
+                        {/* Navigasi Tab Interaktif Lembaga */}
+                        <div className="flex flex-wrap justify-center gap-2 mb-10 border-b border-gray-200 pb-6">
+                            <button onClick={() => setActiveTab('perangkat')} className={`px-4 py-2 rounded-xl font-bold text-xs transition ${activeTab === 'perangkat' ? 'bg-green-700 text-white shadow' : 'bg-white text-gray-700 border hover:bg-gray-50'}`}>PERANGKAT DESA</button>
+                            <button onClick={() => setActiveTab('bpd')} className={`px-4 py-2 rounded-xl font-medium text-xs transition ${activeTab === 'bpd' ? 'bg-green-700 text-white shadow' : 'bg-white text-gray-700 border hover:bg-gray-50'}`}>BPD</button>
+                            <button onClick={() => setActiveTab('lkmd')} className={`px-4 py-2 rounded-xl font-medium text-xs transition ${activeTab === 'lkmd' ? 'bg-green-700 text-white shadow' : 'bg-white text-gray-700 border hover:bg-gray-50'}`}>LKMD</button>
+                            <button onClick={() => setActiveTab('tpk')} className={`px-4 py-2 rounded-xl font-medium text-xs transition ${activeTab === 'tpk' ? 'bg-green-700 text-white shadow' : 'bg-white text-gray-700 border hover:bg-gray-50'}`}>TPK / KPMD</button>
+                            <button onClick={() => setActiveTab('pkk')} className={`px-4 py-2 rounded-xl font-medium text-xs transition ${activeTab === 'pkk' ? 'bg-green-700 text-white shadow' : 'bg-white text-gray-700 border hover:bg-gray-50'}`}>PKK</button>
+                            <button onClick={() => setActiveTab('rt_rw')} className={`px-4 py-2 rounded-xl font-medium text-xs transition ${activeTab === 'rt_rw' ? 'bg-green-700 text-white shadow' : 'bg-white text-gray-700 border hover:bg-gray-50'}`}>RT / RW</button>
+                            <button onClick={() => setActiveTab('ormas')} className={`px-4 py-2 rounded-xl font-medium text-xs transition ${activeTab === 'ormas' ? 'bg-green-700 text-white shadow' : 'bg-white text-gray-700 border hover:bg-gray-50'}`}>ORMAS / PEMUDA</button>
+                        </div>
+
+                        {/* Konten Tab: Perangkat Desa */}
+                        {activeTab === 'perangkat' && (
                             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
                                 {daftarPerangkat.map((p, index) => (
-                                    <div key={index} className="bg-white rounded-3xl shadow-sm border border-gray-100 overflow-hidden text-center hover:shadow-md transition duration-300 group">
-                                        <div className="h-56 bg-green-50 flex items-center justify-center overflow-hidden relative">
-                                            {p.foto ? (
-                                            <img src={`/storage/${p.foto}`} alt={p.nama} className="w-full h-full object-cover group-hover:scale-105 transition duration-500" />
-                                        ) : (
-                                            <span className="text-6xl">👨‍💼</span>
-                                        )}
+                                    <div key={index} className="bg-white rounded-3xl shadow-sm border p-6 text-center group">
+                                        <div className="h-48 bg-green-50 flex items-center justify-center rounded-2xl mb-4 overflow-hidden">
+                                            {p.foto ? <img src={`/storage/${p.foto}`} alt={p.nama} className="w-full h-full object-cover" /> : <span className="text-5xl">👨‍💼</span>}
                                         </div>
-                                        <div className="p-6">
-                                            <h4 className="font-extrabold text-lg text-gray-900 mb-1">{p.nama}</h4>
-                                            <span className="text-green-700 font-bold text-xs bg-green-50 inline-block px-3 py-1 rounded-full">
-                                                {p.jabatan}
-                                            </span>
-                                        </div>
+                                        <h4 className="font-extrabold text-lg text-gray-900">{p.nama}</h4>
+                                        <span className="text-green-700 font-bold text-xs bg-green-50 px-3 py-1 rounded-full inline-block mt-1">{p.jabatan}</span>
+                                        {p.alamat && <p className="text-xs text-gray-500 mt-2">Alamat: {p.alamat}</p>}
                                     </div>
                                 ))}
                             </div>
-                        ) : (
-                            <div className="text-center py-12 bg-white rounded-3xl border border-dashed border-gray-200">
-                                <p className="text-gray-400 italic">Data perangkat belum ada.</p>
+                        )}
+
+                        {/* Konten Tab: BPD */}
+                        {activeTab === 'bpd' && (
+                            <div className="bg-white rounded-3xl border p-8 shadow-sm">
+                                <h3 className="text-xl font-bold mb-4">Badan Permusyawaratan Desa (BPD)</h3>
+                                <table className="min-w-full divide-y divide-gray-200">
+                                    <thead className="bg-gray-50">
+                                        <tr>
+                                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Jabatan</th>
+                                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Nama</th>
+                                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Alamat</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody className="divide-y divide-gray-200">
+                                        {daftarBpd.map((item, idx) => (
+                                            <tr key={idx}>
+                                                <td className="px-6 py-4 text-sm font-medium">{item.jabatan}</td>
+                                                <td className="px-6 py-4 text-sm">{item.nama}</td>
+                                                <td className="px-6 py-4 text-sm text-gray-600">{item.alamat || '-'}</td>
+                                            </tr>
+                                        ))}
+                                    </tbody>
+                                </table>
+                            </div>
+                        )}
+
+                        {/* Konten Tab: LKMD */}
+                        {activeTab === 'lkmd' && (
+                            <div className="bg-white rounded-3xl border p-8 shadow-sm">
+                                <h3 className="text-xl font-bold mb-4">Lembaga Pemberdayaan Masyarakat Desa (LKMD)</h3>
+                                <table className="min-w-full divide-y divide-gray-200">
+                                    <thead className="bg-gray-50">
+                                        <tr>
+                                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Nama</th>
+                                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Alamat</th>
+                                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Jabatan</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody className="divide-y divide-gray-200">
+                                        {daftarLkmd.map((item, idx) => (
+                                            <tr key={idx}>
+                                                <td className="px-6 py-4 text-sm font-medium">{item.nama}</td>
+                                                <td className="px-6 py-4 text-sm text-gray-600">{item.alamat || '-'}</td>
+                                                <td className="px-6 py-4 text-sm">{item.jabatan}</td>
+                                            </tr>
+                                        ))}
+                                    </tbody>
+                                </table>
+                            </div>
+                        )}
+
+                        {/* Konten Tab: TPK / KPMD */}
+                        {activeTab === 'tpk' && (
+                            <div className="bg-white rounded-3xl border p-8 shadow-sm">
+                                <h3 className="text-xl font-bold mb-4">Tim Pengelola Kegiatan (TPK) / KPMD</h3>
+                                <table className="min-w-full divide-y divide-gray-200">
+                                    <thead className="bg-gray-50">
+                                        <tr>
+                                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Jabatan</th>
+                                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Nama</th>
+                                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Alamat</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody className="divide-y divide-gray-200">
+                                        {daftarTpk.map((item, idx) => (
+                                            <tr key={idx}>
+                                                <td className="px-6 py-4 text-sm font-medium">{item.jabatan}</td>
+                                                <td className="px-6 py-4 text-sm">{item.nama}</td>
+                                                <td className="px-6 py-4 text-sm text-gray-600">{item.alamat || '-'}</td>
+                                            </tr>
+                                        ))}
+                                    </tbody>
+                                </table>
+                            </div>
+                        )}
+
+                        {/* Konten Tab: PKK */}
+                        {activeTab === 'pkk' && (
+                            <div className="bg-white rounded-3xl border p-8 shadow-sm">
+                                <h3 className="text-xl font-bold mb-4">Pemberdayaan Kesejahteraan Keluarga (PKK)</h3>
+                                <table className="min-w-full divide-y divide-gray-200">
+                                    <thead className="bg-gray-50">
+                                        <tr>
+                                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Jabatan</th>
+                                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Nama Pengurus</th>
+                                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Alamat</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody className="divide-y divide-gray-200">
+                                        {daftarPkk.length > 0 ? daftarPkk.map((item, idx) => (
+                                            <tr key={idx}>
+                                                <td className="px-6 py-4 text-sm font-medium">{item.jabatan}</td>
+                                                <td className="px-6 py-4 text-sm font-bold text-gray-900">{item.nama}</td>
+                                                <td className="px-6 py-4 text-sm text-gray-600">{item.alamat || '-'}</td>
+                                            </tr>
+                                        )) : (
+                                            <tr><td colSpan="3" className="px-6 py-4 text-center text-gray-400">Data PKK belum tersedia.</td></tr>
+                                        )}
+                                    </tbody>
+                                </table>
+                            </div>
+                        )}
+
+                        {/* Konten Tab: RT/RW */}
+                        {activeTab === 'rt_rw' && (
+                            <div className="bg-white rounded-3xl border p-8 shadow-sm">
+                                <h3 className="text-xl font-bold mb-4">Rukun Tetangga & Rukun Warga (RT / RW)</h3>
+                                <table className="min-w-full divide-y divide-gray-200">
+                                    <thead className="bg-gray-50">
+                                        <tr>
+                                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Wilayah / RW</th>
+                                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Jabatan</th>
+                                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Nama Ketua</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody className="divide-y divide-gray-200">
+                                        {daftarRtRw.length > 0 ? daftarRtRw.map((item, idx) => (
+                                            <tr key={idx}>
+                                                <td className="px-6 py-4 text-sm font-semibold text-green-800">{item.alamat}</td>
+                                                <td className="px-6 py-4 text-sm">{item.jabatan}</td>
+                                                <td className="px-6 py-4 text-sm font-bold text-gray-900">{item.nama}</td>
+                                            </tr>
+                                        )) : (
+                                            <tr><td colSpan="3" className="px-6 py-4 text-center text-gray-400">Data RT/RW belum tersedia.</td></tr>
+                                        )}
+                                    </tbody>
+                                </table>
+                            </div>
+                        )}
+
+                        {/* Konten Tab: Ormas/Pemuda */}
+                        {activeTab === 'ormas' && (
+                            <div className="bg-white rounded-3xl border p-8 shadow-sm">
+                                <h3 className="text-xl font-bold mb-3">Karang Taruna & Ormas Pemuda (FKPG)</h3>
+                                <p className="text-gray-600 text-sm leading-relaxed">
+                                    Ormas Pemuda di Desa Gedangan diwadahi dengan kelompok pemuda karang taruna desa <strong>FKPG (Forum Komunikasi Pemuda Desa Gedangan)</strong> yang mewakili kelompok pemuda di tingkat desa.
+                                </p>
                             </div>
                         )}
                     </section>
@@ -101,8 +250,6 @@ export default function ProfilDesa({ profil, perangkat, dusun, auth }) {
                             <span className="p-2.5 bg-green-100 text-green-700 rounded-xl text-xl">🗺️</span>
                             <h2 className="text-2xl md:text-3xl font-extrabold text-gray-900">Kondisi Umum & Geografis</h2>
                         </div>
-
-                        {/* Highlight Letak & Luas */}
                         <div className="bg-gradient-to-r from-green-900 to-teal-800 text-white rounded-3xl p-8 shadow-xl grid grid-cols-1 md:grid-cols-3 gap-6 items-center">
                             <div>
                                 <p className="text-green-300 text-xs font-bold uppercase tracking-wider mb-1">Letak Geografis</p>
@@ -117,230 +264,31 @@ export default function ProfilDesa({ profil, perangkat, dusun, auth }) {
                                 <p className="text-lg font-semibold">{profil?.luas_wilayah || '267,707 Ha'}</p>
                             </div>
                         </div>
-
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-8">
-                            
-                            {/* Batas Wilayah */}
-                            <div className="bg-white rounded-3xl border border-gray-100 shadow-sm p-8 hover:shadow-md transition">
-                                <h3 className="font-bold text-gray-900 text-lg mb-6 flex items-center gap-2">
-                                    🧭 Batas Wilayah
-                                </h3>
-                                <ul className="space-y-4 text-sm text-gray-600">
-                                    <li className="flex justify-between border-b border-gray-100 pb-3">
-                                        <span className="font-bold text-gray-700">Utara</span> 
-                                        <span className="text-right">{profil?.batas_utara || 'Desa Sraten'}</span>
-                                    </li>
-                                    <li className="flex justify-between border-b border-gray-100 pb-3">
-                                        <span className="font-bold text-gray-700">Timur</span> 
-                                        <span className="text-right">{profil?.batas_timur || 'Kab. Semarang & Kota Salatiga'}</span>
-                                    </li>
-                                    <li className="flex justify-between border-b border-gray-100 pb-3">
-                                        <span className="font-bold text-gray-700">Selatan</span> 
-                                        <span className="text-right">{profil?.batas_selatan || 'Desa Polobogo, Kec. Getasan'}</span>
-                                    </li>
-                                    <li className="flex justify-between pb-1">
-                                        <span className="font-bold text-gray-700">Barat</span> 
-                                        <span className="text-right">{profil?.batas_barat || 'Desa Kalibeji & Desa Rowosari'}</span>
-                                    </li>
-                                </ul>
-                            </div>
-
-                            {/* Klimatologi */}
-                            <div className="bg-white rounded-3xl border border-gray-100 shadow-sm p-8 hover:shadow-md transition">
-                                <h3 className="font-bold text-gray-900 text-lg mb-6 flex items-center gap-2">
-                                    ⛅ Klimatologi
-                                </h3>
-                                <ul className="space-y-4 text-sm text-gray-600">
-                                    <li className="flex justify-between border-b border-gray-100 pb-3">
-                                        <span className="font-bold text-gray-700">Iklim</span> 
-                                        <span className="font-bold text-green-700 bg-green-50 px-2.5 py-1 rounded-md">{profil?.iklim || 'Tropis'}</span>
-                                    </li>
-                                    <li className="flex justify-between border-b border-gray-100 pb-3">
-                                        <span className="font-bold text-gray-700">Suhu Udara Rata-rata</span> 
-                                        <span>{profil?.suhu || '20°C - 30°C'}</span>
-                                    </li>
-                                    <li className="flex justify-between border-b border-gray-100 pb-3">
-                                        <span className="font-bold text-gray-700">Curah Hujan</span> 
-                                        <span>{profil?.curah_hujan || '3000 mm'}</span>
-                                    </li>
-                                    <li className="flex justify-between pb-1">
-                                        <span className="font-bold text-gray-700">Kelembaban Udara</span> 
-                                        <span>{profil?.kelembaban || '-'}</span>
-                                    </li>
-                                </ul>
-                            </div>
-
-                            {/* Topografi & Tata Guna Lahan */}
-                            <div className="bg-white rounded-3xl border border-gray-100 shadow-sm p-8 md:col-span-2 hover:shadow-md transition">
-                                <h3 className="font-bold text-gray-900 text-lg mb-6 flex items-center gap-2">
-                                    🏞️ Topografi & Tata Guna Lahan
-                                </h3>
-                                <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                                    <div className="bg-blue-50/60 p-5 rounded-2xl border border-blue-100 text-center">
-                                        <p className="text-xs font-bold text-blue-600 uppercase mb-1">Tanah Datar</p>
-                                        <p className="text-xl font-extrabold text-blue-800">{profil?.luas_datar || '196,713 Ha'}</p>
-                                    </div>
-                                    <div className="bg-amber-50/60 p-5 rounded-2xl border border-amber-100 text-center">
-                                        <p className="text-xs font-bold text-amber-600 uppercase mb-1">Pegunungan</p>
-                                        <p className="text-xl font-extrabold text-amber-800">{profil?.luas_pegunungan || '70,994 Ha'}</p>
-                                    </div>
-                                    <div className="bg-green-50/60 p-5 rounded-2xl border border-green-100 text-center">
-                                        <p className="text-xs font-bold text-green-600 uppercase mb-1">Sawah Teririgasi</p>
-                                        <p className="text-xl font-extrabold text-green-800">{profil?.sawah_irigasi || '30,500 Ha'}</p>
-                                    </div>
-                                    <div className="bg-gray-50 p-5 rounded-2xl border border-gray-200 text-center">
-                                        <p className="text-xs font-bold text-gray-600 uppercase mb-1">Pemukiman</p>
-                                        <p className="text-xl font-extrabold text-gray-800">{profil?.pemukiman || '60 Ha'}</p>
-                                    </div>
-                                </div>
-                            </div>
-                            
-                            {/* Gambaran Umum Wilayah */}
-                            {profil?.kondisi_umum && (
-                                <div className="bg-white rounded-3xl border border-gray-100 shadow-sm p-8 md:col-span-2">
-                                    <h3 className="font-bold text-gray-900 text-lg mb-3">Gambaran Umum Wilayah</h3>
-                                    <p className="text-gray-700 leading-relaxed whitespace-pre-line text-sm md:text-base">
-                                        {profil.kondisi_umum}
-                                    </p>
-                                </div>
-                            )}
-                        </div>
                     </section>
 
                     {/* 4. PENDUDUK */}
                     <section id="penduduk" className="scroll-mt-28 space-y-10">
-                        <div>
-                            <div className="flex items-center gap-3 mb-8">
-                                <span className="p-2.5 bg-green-100 text-green-700 rounded-xl text-xl">📊</span>
-                                <h2 className="text-2xl md:text-3xl font-extrabold text-gray-900">Profil Kependudukan</h2>
-                            </div>
-                            
-                            {/* Ringkasan Total Penduduk */}
-                            <div className="grid grid-cols-2 md:grid-cols-4 gap-6 text-center mb-10">
-                                <div className="bg-green-700 text-white rounded-3xl p-6 shadow-md">
-                                    <p className="text-3xl font-extrabold">{formatAngka(laki + perempuan)}</p>
-                                    <p className="text-xs mt-1 uppercase tracking-wider font-bold opacity-90">Total Jiwa</p>
-                                </div>
-                                <div className="bg-blue-600 text-white rounded-3xl p-6 shadow-md">
-                                    <p className="text-3xl font-extrabold">{formatAngka(laki)}</p>
-                                    <p className="text-xs mt-1 uppercase tracking-wider font-bold opacity-90">Laki-laki</p>
-                                </div>
-                                <div className="bg-pink-600 text-white rounded-3xl p-6 shadow-md">
-                                    <p className="text-3xl font-extrabold">{formatAngka(perempuan)}</p>
-                                    <p className="text-xs mt-1 uppercase tracking-wider font-bold opacity-90">Perempuan</p>
-                                </div>
-                                <div className="bg-amber-600 text-white rounded-3xl p-6 shadow-md">
-                                    <p className="text-3xl font-extrabold">{formatAngka(kk)}</p>
-                                    <p className="text-xs mt-1 uppercase tracking-wider font-bold opacity-90">Kepala Keluarga</p>
-                                </div>
-                            </div>
-
-                            {/* Tabel Data Penduduk Aman Tanpa Nabrak */}
-                            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
-                                
-                                {/* KOTAK KIRI: Tabel Kelompok Usia */}
-                                <div className="bg-white rounded-3xl border border-gray-100 shadow-sm overflow-hidden flex flex-col">
-                                    <div className="bg-gray-50/80 border-b border-gray-100 px-6 py-4">
-                                        <h3 className="font-bold text-gray-900 text-lg">Kelompok Usia</h3>
-                                    </div>
-                                    <div className="px-2 pb-2">
-                                        <table className="w-full text-sm text-left text-gray-600">
-                                            <thead className="text-xs text-gray-700 uppercase bg-gray-50 sticky top-0 z-10">
-                                                <tr>
-                                                    <th className="px-6 py-2.5 rounded-l-xl">Kelompok Umur</th>
-                                                    <th className="px-4 py-2.5 text-center">Laki-laki</th>
-                                                    <th className="px-6 py-2.5 text-center rounded-r-xl">Perempuan</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody className="divide-y divide-gray-100">
-                                                {profil?.kelompok_umur && profil.kelompok_umur.length > 0 ? (
-                                                    profil.kelompok_umur.map((item, index) => (
-                                                        <tr key={index} className="hover:bg-gray-50/50">
-                                                            <td className="px-6 py-2.5 font-medium text-gray-900">{item.rentang}</td>
-                                                            <td className="px-4 py-2.5 text-center">{item.laki}</td>
-                                                            <td className="px-6 py-2.5 text-center">{item.perempuan}</td>
-                                                        </tr>
-                                                    ))
-                                                ) : (
-                                                    <tr><td colSpan="3" className="px-6 py-6 text-center italic text-gray-400">Data belum tersedia</td></tr>
-                                                )}
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                </div>
-
-                                {/* KOTAK KANAN: Tabel Agama & Mata Pencaharian */}
-                                <div className="flex flex-col gap-8 w-full">
-                                    
-                                    {/* ATAS KANAN: Tabel Agama */}
-                                    <div className="bg-white rounded-3xl border border-gray-100 shadow-sm overflow-hidden">
-                                        <div className="bg-gray-50/80 border-b border-gray-100 px-6 py-4">
-                                            <h3 className="font-bold text-gray-900 text-lg">Agama Penduduk</h3>
-                                        </div>
-                                        <table className="w-full text-sm text-left text-gray-600">
-                                            <thead className="text-xs text-gray-700 uppercase bg-gray-50">
-                                                <tr>
-                                                    <th className="px-6 py-2.5">Agama</th>
-                                                    <th className="px-6 py-2.5 text-right">Jumlah</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody className="divide-y divide-gray-100">
-                                                {profil?.agama && profil.agama.length > 0 ? (
-                                                    profil.agama.map((item, index) => (
-                                                        <tr key={index} className="hover:bg-gray-50/50">
-                                                            <td className="px-6 py-2.5 font-medium text-gray-900">{item.nama}</td>
-                                                            <td className="px-6 py-2.5 text-right font-bold text-green-700">{formatAngka(item.jumlah)} Jiwa</td>
-                                                        </tr>
-                                                    ))
-                                                ) : (
-                                                    <tr><td colSpan="2" className="px-6 py-6 text-center italic text-gray-400">Data belum tersedia</td></tr>
-                                                )}
-                                            </tbody>
-                                        </table>
-                                    </div>
-
-                                    {/* BAWAH KANAN: Tabel Pekerjaan */}
-                                    <div className="bg-white rounded-3xl border border-gray-100 shadow-sm overflow-hidden flex flex-col">
-                                        <div className="bg-gray-50/80 border-b border-gray-100 px-6 py-4 shrink-0">
-                                            <h3 className="font-bold text-gray-900 text-lg">Mata Pencaharian</h3>
-                                        </div>
-                                        <div className="overflow-x-auto px-2 pb-2">
-                                            <table className="w-full text-sm text-left text-gray-600">
-                                                <thead className="text-xs text-gray-700 uppercase bg-gray-50 sticky top-0 z-10">
-                                                    <tr>
-                                                        <th className="px-6 py-2.5 rounded-l-xl">Jenis Pekerjaan</th>
-                                                        <th className="px-6 py-2.5 text-right rounded-r-xl">Jumlah</th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody className="divide-y divide-gray-100">
-                                                    {profil?.pekerjaan && profil.pekerjaan.length > 0 ? (
-                                                        profil.pekerjaan.map((item, index) => (
-                                                            <tr key={index} className="hover:bg-gray-50/50">
-                                                                <td className="px-6 py-2.5 font-medium text-gray-900">{item.nama}</td>
-                                                                <td className="px-6 py-2.5 text-right font-bold text-green-700">{formatAngka(item.jumlah)}</td>
-                                                            </tr>
-                                                        ))
-                                                    ) : (
-                                                        <tr><td colSpan="2" className="px-6 py-6 text-center italic text-gray-400">Data belum tersedia</td></tr>
-                                                    )}
-                                                </tbody>
-                                            </table>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+                        <div className="flex items-center gap-3 mb-8">
+                            <span className="p-2.5 bg-green-100 text-green-700 rounded-xl text-xl">📊</span>
+                            <h2 className="text-2xl md:text-3xl font-extrabold text-gray-900">Profil Kependudukan</h2>
                         </div>
-                    </section>
-
-                    {/* 5. POTENSI & MASALAH */}
-                    <section id="masalah" className="scroll-mt-28 grid grid-cols-1 md:grid-cols-2 gap-8">
-                        <div className="bg-white rounded-3xl shadow-sm border-t-4 border-green-600 border-x border-b p-8">
-                            <h3 className="text-2xl font-extrabold text-green-700 mb-4">🌱 Potensi</h3>
-                            <p className="text-gray-700 leading-relaxed">{profil?.potensi || '-'}</p>
-                        </div>
-                        <div className="bg-white rounded-3xl shadow-sm border-t-4 border-amber-500 border-x border-b p-8">
-                            <h3 className="text-2xl font-extrabold text-amber-700 mb-4">⚠️ Tantangan</h3>
-                            <p className="text-gray-700 leading-relaxed">{profil?.masalah || '-'}</p>
+                        <div className="grid grid-cols-2 md:grid-cols-4 gap-6 text-center mb-10">
+                            <div className="bg-green-700 text-white rounded-3xl p-6 shadow-md">
+                                <p className="text-3xl font-extrabold">{formatAngka(laki + perempuan)}</p>
+                                <p className="text-xs mt-1 uppercase tracking-wider font-bold opacity-90">Total Jiwa</p>
+                            </div>
+                            <div className="bg-blue-600 text-white rounded-3xl p-6 shadow-md">
+                                <p className="text-3xl font-extrabold">{formatAngka(laki)}</p>
+                                <p className="text-xs mt-1 uppercase tracking-wider font-bold opacity-90">Laki-laki</p>
+                            </div>
+                            <div className="bg-pink-600 text-white rounded-3xl p-6 shadow-md">
+                                <p className="text-3xl font-extrabold">{formatAngka(perempuan)}</p>
+                                <p className="text-xs mt-1 uppercase tracking-wider font-bold opacity-90">Perempuan</p>
+                            </div>
+                            <div className="bg-amber-600 text-white rounded-3xl p-6 shadow-md">
+                                <p className="text-3xl font-extrabold">{formatAngka(kk)}</p>
+                                <p className="text-xs mt-1 uppercase tracking-wider font-bold opacity-90">Kepala Keluarga</p>
+                            </div>
                         </div>
                     </section>
 

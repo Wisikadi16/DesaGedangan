@@ -10,86 +10,88 @@ use Inertia\Inertia;
 
 class PerangkatController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
+        $kategori = $request->query('kategori', 'Perangkat Desa');
+
+        $perangkat = VillageOfficial::where('kategori', $kategori)
+            ->orderBy('urutan', 'asc')
+            ->get();
+
         return Inertia::render('Admin/Perangkat/Index', [
-            'perangkat' => VillageOfficial::orderBy('urutan')->orderBy('id')->get(),
+            'perangkat' => $perangkat,
+            'kategori_aktif' => $kategori
         ]);
     }
 
     public function create()
     {
-        return Inertia::render('Admin/Perangkat/Form', ['perangkat' => null]);
+        return Inertia::render('Admin/Perangkat/Form');
     }
 
     public function store(Request $request)
     {
-        $data = $request->validate($this->rules());
+        $validated = $request->validate([
+            'kategori' => 'required|string',
+            'nama' => 'required|string|max:255',
+            'jabatan' => 'required|string|max:255',
+            'alamat' => 'nullable|string|max:255',
+            'telepon' => 'nullable|string|max:30',
+            'urutan' => 'nullable|integer',
+            'foto' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:2048',
+        ]);
 
-        // Urutan kosong -> taruh di paling akhir
-        $data['urutan'] = $data['urutan'] ?? ((int) VillageOfficial::max('urutan') + 1);
-        $data['foto'] = $request->hasFile('foto')
-            ? $request->file('foto')->store('perangkat', 'public')
-            : null;
+        if ($request->hasFile('foto')) {
+            $validated['foto'] = $request->file('foto')->store('perangkat', 'public');
+        }
 
-        VillageOfficial::create($data);
+        VillageOfficial::create($validated);
 
-        return redirect()->route('admin.pemerintahan.index')->with('message', 'Perangkat desa berhasil ditambahkan!');
+        return redirect()->route('admin.pemerintahan.index', ['kategori' => $request->kategori])
+            ->with('message', 'Data berhasil ditambahkan!');
     }
 
-    public function edit($id)
+    public function edit(VillageOfficial $pemerintahan)
     {
         return Inertia::render('Admin/Perangkat/Form', [
-            'perangkat' => VillageOfficial::findOrFail($id),
+            'perangkat' => $pemerintahan
         ]);
     }
 
-    public function update(Request $request, $id)
+    public function update(Request $request, VillageOfficial $pemerintahan)
     {
-        $perangkat = VillageOfficial::findOrFail($id);
-
-        $data = $request->validate($this->rules());
-
-        // Urutan dikosongkan -> pertahankan urutan lama
-        $data['urutan'] = $data['urutan'] ?? $perangkat->urutan;
-
-        if ($request->hasFile('foto')) {
-            $baru = $request->file('foto')->store('perangkat', 'public');
-            if ($perangkat->foto) {
-                Storage::disk('public')->delete($perangkat->foto);
-            }
-            $data['foto'] = $baru;
-        } else {
-            unset($data['foto']);
-        }
-
-        $perangkat->update($data);
-
-        return redirect()->route('admin.pemerintahan.index')->with('message', 'Data perangkat desa berhasil diperbarui!');
-    }
-
-    public function destroy($id)
-    {
-        $perangkat = VillageOfficial::findOrFail($id);
-
-        if ($perangkat->foto) {
-            Storage::disk('public')->delete($perangkat->foto);
-        }
-
-        $perangkat->delete();
-
-        return redirect()->route('admin.pemerintahan.index')->with('message', 'Perangkat desa berhasil dihapus!');
-    }
-
-    private function rules(): array
-    {
-        return [
+        $validated = $request->validate([
+            'kategori' => 'required|string',
             'nama' => 'required|string|max:255',
             'jabatan' => 'required|string|max:255',
+            'alamat' => 'nullable|string|max:255',
             'telepon' => 'nullable|string|max:30',
-            'deskripsi' => 'nullable|string|max:1000',
-            'urutan' => 'nullable|integer|min:0|max:1000',
-            'foto' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:5120',
-        ];
+            'urutan' => 'nullable|integer',
+            'foto' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:2048',
+        ]);
+
+        if ($request->hasFile('foto')) {
+            if ($pemerintahan->foto) {
+                Storage::disk('public')->delete($pemerintahan->foto);
+            }
+            $validated['foto'] = $request->file('foto')->store('perangkat', 'public');
+        }
+
+        $pemerintahan->update($validated);
+
+        return redirect()->route('admin.pemerintahan.index', ['kategori' => $request->kategori])
+            ->with('message', 'Data berhasil diperbarui!');
+    }
+
+    public function destroy(VillageOfficial $pemerintahan)
+    {
+        $kategori = $pemerintahan->kategori;
+        if ($pemerintahan->foto) {
+            Storage::disk('public')->delete($pemerintahan->foto);
+        }
+        $pemerintahan->delete();
+
+        return redirect()->route('admin.pemerintahan.index', ['kategori' => $kategori])
+            ->with('message', 'Data berhasil dihapus!');
     }
 }

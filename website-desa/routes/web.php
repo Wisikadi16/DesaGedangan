@@ -13,6 +13,7 @@ use App\Http\Controllers\Admin\DesaWisataController as AdminDesaWisataController
 use App\Http\Controllers\Admin\SyaratPelayananController as AdminSyaratPelayananController;
 use App\Http\Controllers\Admin\LayananSmardController as AdminLayananSmardController;
 use App\Http\Controllers\Admin\PotensiDesaController as AdminPotensiDesaController;
+use App\Http\Controllers\Admin\LembagaDesaController; // Import Controller Lembaga Desa Baru
 use App\Models\News;
 use App\Models\VillageProfile;
 use App\Models\DesaWisata;
@@ -121,6 +122,9 @@ Route::middleware(['auth', 'verified'])->prefix('admin')->name('admin.')->group(
     Route::post('/profil', [ProfilController::class, 'update'])->name('profil.update');
     Route::resource('/pemerintahan', PerangkatController::class)->except('show');
     Route::resource('/dusun', DusunController::class)->except('show');
+
+    // CRUD Lembaga Desa (Baru)
+    Route::resource('/lembaga', LembagaDesaController::class)->except(['show']);
 });
 
 // Auth User Profile
