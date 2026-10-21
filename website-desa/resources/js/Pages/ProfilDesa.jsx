@@ -17,7 +17,7 @@ export default function ProfilDesa({ profil, perangkat, bpd, lkmd, tpk, pkk, rtr
     const perempuan = Number(profil?.jumlah_perempuan || 0);
     const kk = Number(profil?.jumlah_kk || 0);
 
-    // Parsing data dinamis dari database (murni kosong / sesuai input admin nantinya)
+    // Parsing data dinamis dari database (kosong dan siap diisi dari panel admin)
     const kelompokUmur = typeof profil?.kelompok_umur === 'string' ? JSON.parse(profil.kelompok_umur) : (profil?.kelompok_umur || []);
     const dataAgama = typeof profil?.agama === 'string' ? JSON.parse(profil.agama) : (profil?.agama || []);
     const dataPekerjaan = typeof profil?.pekerjaan === 'string' ? JSON.parse(profil.pekerjaan) : (profil?.pekerjaan || []);
@@ -52,8 +52,8 @@ export default function ProfilDesa({ profil, perangkat, bpd, lkmd, tpk, pkk, rtr
                                 <span className="p-2.5 bg-green-100 text-green-700 rounded-xl text-xl">📜</span>
                                 <h2 className="text-2xl md:text-3xl font-extrabold text-gray-900">Sejarah Desa</h2>
                             </div>
-                            <div className="bg-white rounded-3xl shadow-sm border border-gray-100 p-8 md:p-10 text-gray-700 leading-relaxed space-y-4 text-base md:text-lg">
-                                <p>{profil?.sejarah || 'Sejarah desa sedang dilengkapi.'}</p>
+                            <div className="bg-white rounded-3xl shadow-sm border border-gray-100 p-8 md:p-10 text-gray-700 leading-relaxed whitespace-pre-line text-base md:text-lg">
+                                {profil?.sejarah || 'Sejarah desa sedang dilengkapi.'}
                             </div>
                         </div>
 
@@ -63,9 +63,9 @@ export default function ProfilDesa({ profil, perangkat, bpd, lkmd, tpk, pkk, rtr
                                 <div>
                                     <span className="text-2xl mb-3 block">🎯</span>
                                     <h3 className="text-xl font-extrabold text-green-800 mb-3">Visi</h3>
-                                    <p className="text-gray-900 text-lg font-bold tracking-wide uppercase">
-                                        "{profil?.visi || '-'}"
-                                    </p>
+                                    <div className="text-gray-900 text-base md:text-lg font-bold tracking-wide whitespace-pre-line leading-relaxed">
+                                        {profil?.visi || '-'}
+                                    </div>
                                 </div>
                             </div>
 
@@ -301,7 +301,7 @@ export default function ProfilDesa({ profil, perangkat, bpd, lkmd, tpk, pkk, rtr
                         </div>
                     </section>
 
-                    {/* 4. PENDUDUK & BOX TABEL KOSONG (USIA, AGAMA, PEKERJAAN) SIAP DIISI DARI PANEL ADMIN */}
+                    {/* 4. PENDUDUK & BOX KOSONG DINAMIS (SIAP DIISI DARI PANEL ADMIN) */}
                     <section id="penduduk" className="scroll-mt-28 space-y-10">
                         <div className="flex items-center gap-3 mb-8">
                             <span className="p-2.5 bg-green-100 text-green-700 rounded-xl text-xl">📊</span>
@@ -328,7 +328,7 @@ export default function ProfilDesa({ profil, perangkat, bpd, lkmd, tpk, pkk, rtr
                             </div>
                         </div>
 
-                        {/* Box Tabel Dinamis (Struktur ada, tapi data MURNI KOSONG / Menunggu input dari Admin) */}
+                        {/* Box Tabel Dinamis (Struktur ada, data murni kosong menunggu input admin) */}
                         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
                             
                             {/* Box Kelompok Usia */}

@@ -26,7 +26,7 @@ class DatabaseSeeder extends Seeder
 
         $this->command?->info("Akun admin siap -> email: admin@gedangan.desa.id | password: DesaGedangan2026");
 
-        // 2. Buat Profil Desa Default & Data Lengkap (Sejarah, Visi Misi, Batas, Demografi Kosong Sesuai Permintaan)
+        // 2. Buat Profil Desa Default & Data Lengkap
         VillageProfile::updateOrCreate(
             ['id' => 1],
             [
@@ -44,15 +44,54 @@ class DatabaseSeeder extends Seeder
                 'batas_selatan' => 'Desa Polobogo, Kec. Getasan',
                 'batas_barat' => 'Desa Kalibeji & Desa Rowosari',
                 'batas_timur' => 'Kab. Semarang & Kota Salatiga',
-                'sejarah' => "Gedangan, adalah merupakan sebuah nama salah satu desa yang terletak di kecamatan Tuntang, kabupaten Semarang. Desa Gedangan terletak di tengah-tengah kawasan kaki gunung Merbabu dan daerah sekitaran Rawa Pening, sehingga Gedangan mempunyai daerah perkebuna, kehutanan dan persawahan. Desa Gedangan wilayah topografinya 500 m diatas permukaan laut dan beriklim tropis bersuhu kisaran 20ºC – 30 ºC sehingga menjadikan Desa Gedangan wilayah yang sejuk, dan cocok dijadikan tempat persinggahan.\n\nLetak geografis desa Gedangan di koordinat 110.4625’’ bujur Timur dan -7.332383’’ Lintang Selatan, dengan luas wilayah 267,707 Ha. Batas wilayah desa Gedangan sebelah barat adalah desa Kalibeji dan desa Rowosari, sebelah selatan desa Polobogo, sebelah utara desa Sraten, dan sebelah timur berbatasan dengan wilayah Kota Salatiga, sehingga warga Gedangan sering menyebutnya sebagai bagian dari wilayah Kota Salatiga.\n\nASAL USUL & BABAD DESA:\nPada masa Penjajahan Belanda banyak para bangsawan yang manjadi Pejabat di Keraton Solo beserta prajuritnya melarikan diri karena tidak berkenan dengan kebijakan pihak Belanda,termasuk Wijaya Kusuma dan Wicitra Kusuma.Mereka lari tanpa tujuan yang pasti melewati banyak daerah dengan beraneka ragam situasi,namun mereka belum juga menemukan daerah yang dirasa aman hingga sampailah mereka ke sebuah daerah tidak bertuan yang sangat subur dan daerah tersebut banyak ditumbuhi pohon Pisang atau dalam bahasa Jawa disebut Gedang. Mereka memutuskan untuk menetap didaerah tersebut dengan mata pencaharian bercocok tanam dan mereka semua merasa nyaman. Semakin lama daerah tersebut menjadi berkembang. Dan sesuai perkembangan jaman maka daerah tersebut dipanggil dengan sebutan Gedangan.\n\nNamun dalam versi lain ada sesepuh yang menyatakan bahwa Wijaya Kusuma dan Wicitra Kusuma beserta anak buahnya lari dari wilayah Keraton Solo karena dikejar Pasukan Belanda dalam sebuah pertempuran .Mereka melarikan diri tanpa arah dan tujuan, hingga mereka hampir tersusul oleh pasukan Belanda .Karena kalah dalam jumlah dan persenjataan wijaya Kusuma .Wicitra Kusuma dan prajuritnya bersembunyi didaerah yang penuh dengan pohon Gedang atau Pisang, setelah Belanda pergi dan keadaan dirasa aman mereka memutuskan menetap didaerah tersebut dan untuk mengenang tempat persembunyian mereka dari kejaran pasukan Belanda tersebut mereka menamakan daerah tempat tinggal mereka yang penuh dengan pohon pisang atau Gedang dengan nama Gedangan.Setelah meninggal Wijaya Kusuma dimakamkan di pemakaman kecil sedangkan Wicitra Kusuma dimakamkan di pemakaman Gede.setelah Indonesia merdeka daerah Gedangan sudah mulai ada pemerintahan desa dengan lurah Nyai Samban seorang wanita .Pada masa pemerintahan lurah Sumarno setelah Nyai Samban wafat ada peraturan yang menyatakan jumlah minimal penduduk dalam satu desa ,kemudian diadakan penggabungan dengan dusun Bandongan ,sebuah dusun yang bersebelahan dengan Gedangan. Untuk nama desa kemudian diundi antara nama Bandungan dan Gedangan, dan yang keluar adalah nama Gedangan. Sejak saat itu Gedangan sah menjadi nama desa yang hingga sekarang sudah berkembang dengan pesat.",
-                'visi' => "DALAM KEBERSAMAAN MEMBANGUN MASYARAKAT DESA GEDANGAN SEUTUHNYA",
-                'misi' => "Bidang Pemerintahan:\n- Bersama lembaga Desa Melakukan evaluasi program Pemerintah Desa setiap bulan\n- Memberikan kemudahan kepada masyarakat dalam setiap pelayanan\n- Tertib administrasi\n- Peningkatan Sumber Daya Manusia\n\nBidang Pertanian Dan Peternakan:\n- Pemberdayaan Kelompok Tani\n- Pengadaan sarana dan Prasarana Pertanian\n- Perawatan sarana dan Prasarana Irigasi\n- Mengikutsertakan warga dalam Pelatihan\n\nBidang Ekonomi:\n1. Peningkatan Pengembangan lembaga keuangan desa\n2. Peningkatan dan pemberdayaan koperasi\n3. Pembinaan Industri kecil\n\nBidang Pendidikan:\n- Memberikan dorongan moril dan Materiil dalam pengembangan pendidikan Swasta\n\nBidang Agama:\n- Menjaga sinergis kerukunan umat beragama\n- Memberikan kebebasan umat beragama dalam menjalankan ibadah sesuai denan agamanya\n\nBidang Sosial:\n- Meningkatkan kepedulian terhadap warga dalam segala kondisi\n\nBidang Seni Budaya:\n- Memberikan dukungan untuk pelestarian kesenian daerah\n- memberikan dukungan terhadap pelaksanaan adat desa\n\nPembangunan Fisik:\nMelaksanakan Pembangunan sesuai RPJMDes",
+                'sejarah' => "Gedangan, adalah merupakan sebuah nama salah satu desa yang terletak di kecamatan Tuntang, kabupaten Semarang. Desa Gedangan terletak di tengah-tengah kawasan kaki gunung Merbabu dan daerah sekitaran Rawa Pening, sehingga Gedangan mempunyai daerah perkebunan, kehutanan dan persawahan. Desa Gedangan wilayah topografinya 500 m diatas permukaan laut dan beriklim tropis bersuhu kisaran 20ºC – 30 ºC sehingga menjadikan Desa Gedangan wilayah yang sejuk, dan cocok dijadikan tempat persinggahan.\n\nLetak geografis desa Gedangan di koordinat 110.4625’’ bujur Timur dan -7.332383’’ Lintang Selatan, dengan luas wilayah 267,707 Ha. Batas wilayah desa Gedangan sebelah barat adalah desa Kalibeji dan desa Rowosari, sebelah selatan desa Polobogo, sebelah utara desa Sraten, dan sebelah timur berbatasan dengan wilayah Kota Salatiga, sehingga warga Gedangan sering menyebutnya sebagai bagian dari wilayah Kota Salatiga.\n\nASAL USUL & BABAD DESA:\nPada masa Penjajahan Belanda banyak para bangsawan yang menjadi Pejabat di Keraton Solo beserta prajuritnya melارikan diri karena tidak berkenan dengan kebijakan pihak Belanda, termasuk Wijaya Kusuma dan Wicitra Kusuma. Mereka lari tanpa tujuan yang pasti melewati banyak daerah dengan beraneka ragam situasi, namun mereka belum juga menemukan daerah yang dirasa aman hingga sampailah mereka ke sebuah daerah tidak bertuan yang sangat subur dan daerah tersebut banyak ditumbuhi pohon Pisang atau dalam bahasa Jawa disebut Gedang. Mereka memutuskan untuk menetap di daerah tersebut dengan mata pencaharian bercocok tanam dan mereka semua merasa nyaman. Semakin lama daerah tersebut menjadi berkembang. Dan sesuai perkembangan jaman maka daerah tersebut dipanggil dengan sebutan Gedangan.\n\nNamun dalam versi lain ada sesepuh yang menyatakan bahwa Wijaya Kusuma dan Wicitra Kusuma beserta anak buahnya lari dari wilayah Keraton Solo karena dikejar Pasukan Belanda dalam sebuah pertempuran. Mereka melarikan diri tanpa arah dan tujuan, hingga mereka hampir tersusul oleh pasukan Belanda. Karena kalah dalam jumlah dan persenjataan Wijaya Kusuma, Wicitra Kusuma dan prajuritnya bersembunyi di daerah yang penuh dengan pohon Gedang atau Pisang, setelah Belanda pergi dan keadaan dirasa aman mereka memutuskan menetap di daerah tersebut dan untuk mengenang tempat persembunyian mereka dari kejaran pasukan Belanda tersebut mereka menamakan daerah tempat tinggal mereka yang penuh dengan pohon pisang atau Gedang dengan nama Gedangan. Setelah meninggal Wijaya Kusuma dimakamkan di pemakaman kecil sedangkan Wicitra Kusuma dimakamkan di pemakaman Gede. Setelah Indonesia merdeka daerah Gedangan sudah mulai ada pemerintahan desa dengan lurah Nyai Samban seorang wanita. Pada masa pemerintahan lurah Sumarno setelah Nyai Samban wafat ada peraturan yang menyatakan jumlah minimal penduduk dalam satu desa, kemudian diadakan penggabungan dengan dusun Bandongan, sebuah dusun yang bersebelahan dengan Gedangan. Untuk nama desa kemudian diundi antara nama Bandungan dan Gedangan, dan yang keluar adalah nama Gedangan. Sejak saat itu Gedangan sah menjadi nama desa yang hingga sekarang sudah berkembang dengan pesat.",
+                
+                // VISI, NILAI, DAN MAKNA TERFORMAT RAPI SESUAI PERMINTAAN
+                'visi' => "DALAM KEBERSAMAAN MEMBANGUN MASYARAKAT DESA GEDANGAN SEUTUHNYA\n\n" .
+                          "Nilai-nilai yang Melandasi VISI:\n" .
+                          "- Desa GEDANGAN mempunyai sumber daya yang ada cukup memadai, hanya saja penanganannya kurang maksimal.\n" .
+                          "- Sebagian besar warga adalah petani dan Buruh Industri ,jadi mereka merupakan potensi desa yang tak ternilai harganya.\n\n" .
+                          "Makna yang Terkandung dalam VISI:\n" .
+                          "- Kebersamaan: Dalam melaksanakan semua kegiatan yang telah diprogramkan  ,selalu dilakukan dengan melibatkan semua unsur masyarakat yang ada di desa Gedangan\n" .
+                          "- Membangun: mengadakan sesuatu yang sebelumnya tidak  ada ,melestarikan ,merawat dan membuat sesuatu menjadi semakin baik\n" .
+                          "- Masyarakat: sekelompok orang atau warga yang ada disuatu daerah yang menjadi salah satu unsur adanya suatu desa.\n" .
+                          "- Desa Gedangan: adalah satu kesatuan masyarakat hukum dengan segala potensinya dalam sistem pemerintahan di wilayah Desa GEDANGAN,\n" .
+                          "- Seutuhnya: Keseluruhan dari aspek yang ada dengan tidak meninggalkan unsur manapun.",
+                
+                // MISI TERFORMAT RAPI PER BIDANG SESUAI PERMINTAAN
+                'misi' => "Bidang Pemerintahan\n" .
+                          "- Bersama lembaga Desa Melakukan evaluasi program Pemerintah Desa setiap bulan\n" .
+                          "- Memberikan kemudahan kepada masyarakat dalam setiap pelayanan\n" .
+                          "- Tertib administrasi\n" .
+                          "- Peningkatan Sumber Daya Manusia\n\n" .
+                          "Bidang Pertanian Dan Peternakan\n" .
+                          "- Pemberdayaan Kelompok Tani\n" .
+                          "- Pengadaan sarana dan Prasarana Pertanian\n" .
+                          "- Perawatan sarana dan Prasarana Irigasi\n" .
+                          "- Mengikutsertakan warga dalam Pelatihan\n\n" .
+                          "Bidang Ekonomi\n" .
+                          "1. Peningkatan Pengembangan lembaga keuangan desa\n" .
+                          "2. Peningkatan dan pemberdayaan koperasi\n" .
+                          "3. Pembinaan Industri kecil\n\n" .
+                          "Bidang Pendidikan\n" .
+                          "- Memberikan dorongan moril dan Materiil dalam pengembangan pendidikan Swasta\n\n" .
+                          "Bidang Agama\n" .
+                          "- Menjaga sinergis kerukunan umat beragama\n" .
+                          "- Memberikan kebebasan umat beragama dalam menjalankan ibadah sesuai denan agamanya\n\n" .
+                          "Bidang Sosial\n" .
+                          "- Meningkatkan kepedulian terhadap warga dalam segala kondisi\n\n" .
+                          "Bidang Seni Budaya\n" .
+                          "- Memberikan dukungan untuk pelestarian kesenian daerah\n" .
+                          "- memberikan dukungan terhadap pelaksanaan adat desa\n\n" .
+                          "Pembangunan Fisik\n" .
+                          "Melaksanakan Pembangunan sesuai RPJMDes",
+
                 'jumlah_laki_laki' => 2150,
                 'jumlah_perempuan' => 2200,
                 'jumlah_kk' => 1350,
-                'kelompok_umur' => json_encode([]), // Dikosongkan agar diisi lewat panel admin
-                'agama' => json_encode([]),         // Dikosongkan agar diisi lewat panel admin
-                'pekerjaan' => json_encode([]),     // Dikosongkan agar diisi lewat panel admin
+                'kelompok_umur' => json_encode([]), // Kosong / siap diisi dari panel admin
+                'agama' => json_encode([]),         // Kosong / siap diisi dari panel admin
+                'pekerjaan' => json_encode([]),     // Kosong / siap diisi dari panel admin
             ]
         );
 

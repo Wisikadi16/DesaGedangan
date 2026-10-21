@@ -1,3 +1,4 @@
+import React, { useState } from 'react';
 import { Head, useForm } from '@inertiajs/react';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import InputLabel from '@/Components/InputLabel';
@@ -5,6 +6,19 @@ import TextInput from '@/Components/TextInput';
 import PrimaryButton from '@/Components/PrimaryButton';
 
 export default function Index({ auth, profil }) {
+    // Helper aman untuk parse data JSON dari database / seeder
+    const parseJsonData = (data) => {
+        if (!data) return [];
+        if (typeof data === 'string') {
+            try {
+                return JSON.parse(data);
+            } catch (e) {
+                return [];
+            }
+        }
+        return Array.isArray(data) ? data : [];
+    };
+
     const { data, setData, post, processing, errors, recentlySuccessful } = useForm({
         nama_desa: profil?.nama_desa || '',
         kecamatan: profil?.kecamatan || '',
@@ -41,10 +55,10 @@ export default function Index({ auth, profil }) {
         jumlah_perempuan: profil?.jumlah_perempuan || '',
         jumlah_kk: profil?.jumlah_kk || '',
 
-        // Data Dinamis (JSON / Array)
-        kelompok_umur: profil?.kelompok_umur || [],
-        pekerjaan: profil?.pekerjaan || [],
-        agama: profil?.agama || [],
+        // Data Dinamis dengan Pengaman Aman dari Database/JSON
+        kelompok_umur: parseJsonData(profil?.kelompok_umur),
+        pekerjaan: parseJsonData(profil?.pekerjaan),
+        agama: parseJsonData(profil?.agama),
     });
 
     const submit = (e) => {
@@ -216,7 +230,7 @@ export default function Index({ auth, profil }) {
                                             <div key={index} className="flex gap-2 items-center bg-gray-50 p-2 rounded border">
                                                 <TextInput value={item.rentang} onChange={(e) => handleDynamicChange('kelompok_umur', index, 'rentang', e.target.value)} className="w-1/3 text-sm" placeholder="Usia (0-4)" />
                                                 <TextInput type="number" value={item.laki} onChange={(e) => handleDynamicChange('kelompok_umur', index, 'laki', e.target.value)} className="w-1/3 text-sm" placeholder="Laki" />
-                                                <TextInput type="number" value={item.perempuan} onChange={(e) => handleDynamicChange('kelompok_umur', index, 'perempuan', e.target.value)} className="w-1/3 text-sm" placeholder="Pr" />
+                                                <TextInput type="number" value={item.perempuan} onChange={(e) => handleDynamicChange('kelomo_umur', index, 'perempuan', e.target.value)} className="w-1/3 text-sm" placeholder="Pr" />
                                                 <button type="button" onClick={() => removeDynamicRow('kelompok_umur', index)} className="p-1 text-red-500 hover:bg-red-100 rounded font-bold">✖</button>
                                             </div>
                                         ))}
