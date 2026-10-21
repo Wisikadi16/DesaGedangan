@@ -17,6 +17,11 @@ export default function ProfilDesa({ profil, perangkat, bpd, lkmd, tpk, pkk, rtr
     const perempuan = Number(profil?.jumlah_perempuan || 0);
     const kk = Number(profil?.jumlah_kk || 0);
 
+    // Parsing data dinamis dari database (murni kosong / sesuai input admin nantinya)
+    const kelompokUmur = typeof profil?.kelompok_umur === 'string' ? JSON.parse(profil.kelompok_umur) : (profil?.kelompok_umur || []);
+    const dataAgama = typeof profil?.agama === 'string' ? JSON.parse(profil.agama) : (profil?.agama || []);
+    const dataPekerjaan = typeof profil?.pekerjaan === 'string' ? JSON.parse(profil.pekerjaan) : (profil?.pekerjaan || []);
+
     const [activeTab, setActiveTab] = useState('perangkat');
 
     return (
@@ -40,30 +45,37 @@ export default function ProfilDesa({ profil, perangkat, bpd, lkmd, tpk, pkk, rtr
 
                 <div className="max-w-6xl mx-auto py-16 px-4 space-y-20">
                     
-                    {/* 1. SEJARAH & VISI MISI */}
+                    {/* 1. SEJARAH & VISI MISI LENGKAP */}
                     <section id="sejarah" className="scroll-mt-28 space-y-10">
                         <div>
                             <div className="flex items-center gap-3 mb-6">
                                 <span className="p-2.5 bg-green-100 text-green-700 rounded-xl text-xl">📜</span>
                                 <h2 className="text-2xl md:text-3xl font-extrabold text-gray-900">Sejarah Desa</h2>
                             </div>
-                            <div className="bg-white rounded-3xl shadow-sm border border-gray-100 p-8 md:p-10 text-gray-700 leading-relaxed whitespace-pre-line text-base md:text-lg">
-                                {profil?.sejarah || 'Sejarah desa sedang dilengkapi.'}
+                            <div className="bg-white rounded-3xl shadow-sm border border-gray-100 p-8 md:p-10 text-gray-700 leading-relaxed space-y-4 text-base md:text-lg">
+                                <p>{profil?.sejarah || 'Sejarah desa sedang dilengkapi.'}</p>
                             </div>
                         </div>
+
+                        {/* VISI & MISI DETAIL */}
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                            <div className="bg-gradient-to-br from-green-50 to-emerald-50/50 rounded-3xl border border-green-200/60 p-8 flex flex-col justify-between shadow-sm">
+                            <div className="bg-gradient-to-br from-green-50 to-emerald-50/50 rounded-3xl border border-green-200/60 p-8 shadow-sm space-y-6">
                                 <div>
                                     <span className="text-2xl mb-3 block">🎯</span>
                                     <h3 className="text-xl font-extrabold text-green-800 mb-3">Visi</h3>
-                                    <p className="text-gray-800 text-lg italic font-medium leading-relaxed">"{profil?.visi || '-'}"</p>
+                                    <p className="text-gray-900 text-lg font-bold tracking-wide uppercase">
+                                        "{profil?.visi || '-'}"
+                                    </p>
                                 </div>
                             </div>
-                            <div className="bg-white rounded-3xl border border-gray-100 p-8 flex flex-col justify-between shadow-sm">
+
+                            <div className="bg-white rounded-3xl border border-gray-100 p-8 shadow-sm space-y-6">
                                 <div>
                                     <span className="text-2xl mb-3 block">🚀</span>
-                                    <h3 className="text-xl font-extrabold text-gray-900 mb-3">Misi</h3>
-                                    <div className="text-gray-600 whitespace-pre-line text-sm md:text-base leading-relaxed">{profil?.misi || '-'}</div>
+                                    <h3 className="text-xl font-extrabold text-gray-900 mb-4">Misi</h3>
+                                    <div className="text-gray-700 whitespace-pre-line text-sm md:text-base leading-relaxed">
+                                        {profil?.misi || '-'}
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -154,7 +166,7 @@ export default function ProfilDesa({ profil, perangkat, bpd, lkmd, tpk, pkk, rtr
                             </div>
                         )}
 
-                        {/* Konten Tab: TPK / KPMD */}
+                        {/* Konten Tab: TPK */}
                         {activeTab === 'tpk' && (
                             <div className="bg-white rounded-3xl border p-8 shadow-sm">
                                 <h3 className="text-xl font-bold mb-4">Tim Pengelola Kegiatan (TPK) / KPMD</h3>
@@ -199,7 +211,7 @@ export default function ProfilDesa({ profil, perangkat, bpd, lkmd, tpk, pkk, rtr
                                                 <td className="px-6 py-4 text-sm text-gray-600">{item.alamat || '-'}</td>
                                             </tr>
                                         )) : (
-                                            <tr><td colSpan="3" className="px-6 py-4 text-center text-gray-400">Data PKK belum tersedia.</td></tr>
+                                            <tr><td colSpan="3" className="px-6 py-4 text-center text-gray-400 italic">Data PKK belum tersedia.</td></tr>
                                         )}
                                     </tbody>
                                 </table>
@@ -226,14 +238,14 @@ export default function ProfilDesa({ profil, perangkat, bpd, lkmd, tpk, pkk, rtr
                                                 <td className="px-6 py-4 text-sm font-bold text-gray-900">{item.nama}</td>
                                             </tr>
                                         )) : (
-                                            <tr><td colSpan="3" className="px-6 py-4 text-center text-gray-400">Data RT/RW belum tersedia.</td></tr>
+                                            <tr><td colSpan="3" className="px-6 py-4 text-center text-gray-400 italic">Data RT/RW belum tersedia.</td></tr>
                                         )}
                                     </tbody>
                                 </table>
                             </div>
                         )}
 
-                        {/* Konten Tab: Ormas/Pemuda */}
+                        {/* Konten Tab: Ormas */}
                         {activeTab === 'ormas' && (
                             <div className="bg-white rounded-3xl border p-8 shadow-sm">
                                 <h3 className="text-xl font-bold mb-3">Karang Taruna & Ormas Pemuda (FKPG)</h3>
@@ -244,7 +256,7 @@ export default function ProfilDesa({ profil, perangkat, bpd, lkmd, tpk, pkk, rtr
                         )}
                     </section>
 
-                    {/* 3. KONDISI UMUM & GEOGRAFIS */}
+                    {/* 3. KONDISI UMUM & GEOGRAFIS & BATAS WILAYAH */}
                     <section id="kondisi" className="scroll-mt-28 space-y-8">
                         <div className="flex items-center gap-3">
                             <span className="p-2.5 bg-green-100 text-green-700 rounded-xl text-xl">🗺️</span>
@@ -253,25 +265,50 @@ export default function ProfilDesa({ profil, perangkat, bpd, lkmd, tpk, pkk, rtr
                         <div className="bg-gradient-to-r from-green-900 to-teal-800 text-white rounded-3xl p-8 shadow-xl grid grid-cols-1 md:grid-cols-3 gap-6 items-center">
                             <div>
                                 <p className="text-green-300 text-xs font-bold uppercase tracking-wider mb-1">Letak Geografis</p>
-                                <p className="text-lg font-semibold">{profil?.letak_geografis || '110.4625" BT dan -7.332383" LS'}</p>
+                                <p className="text-lg font-semibold">{profil?.letak_geografis || '-'}</p>
                             </div>
                             <div className="md:border-l md:border-green-700/60 md:pl-6">
                                 <p className="text-green-300 text-xs font-bold uppercase tracking-wider mb-1">Ketinggian Rata-rata</p>
-                                <p className="text-lg font-semibold">{profil?.ketinggian || '500 mdpl'}</p>
+                                <p className="text-lg font-semibold">{profil?.ketinggian || '-'}</p>
                             </div>
                             <div className="md:border-l md:border-green-700/60 md:pl-6">
                                 <p className="text-green-300 text-xs font-bold uppercase tracking-wider mb-1">Luas Wilayah</p>
-                                <p className="text-lg font-semibold">{profil?.luas_wilayah || '267,707 Ha'}</p>
+                                <p className="text-lg font-semibold">{profil?.luas_wilayah || '-'}</p>
+                            </div>
+                        </div>
+
+                        {/* Batas Wilayah Desa */}
+                        <div className="bg-white rounded-3xl border border-gray-100 p-8 shadow-sm space-y-6">
+                            <h3 className="text-xl font-extrabold text-gray-900">Batas Wilayah Desa</h3>
+                            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                                <div className="bg-green-50/50 p-5 rounded-2xl border border-green-100">
+                                    <p className="text-xs font-bold text-green-800 uppercase mb-1">Sebelah Utara</p>
+                                    <p className="text-gray-700 font-medium">{profil?.batas_utara || '-'}</p>
+                                </div>
+                                <div className="bg-green-50/50 p-5 rounded-2xl border border-green-100">
+                                    <p className="text-xs font-bold text-green-800 uppercase mb-1">Sebelah Selatan</p>
+                                    <p className="text-gray-700 font-medium">{profil?.batas_selatan || '-'}</p>
+                                </div>
+                                <div className="bg-green-50/50 p-5 rounded-2xl border border-green-100">
+                                    <p className="text-xs font-bold text-green-800 uppercase mb-1">Sebelah Barat</p>
+                                    <p className="text-gray-700 font-medium">{profil?.batas_barat || '-'}</p>
+                                </div>
+                                <div className="bg-green-50/50 p-5 rounded-2xl border border-green-100">
+                                    <p className="text-xs font-bold text-green-800 uppercase mb-1">Sebelah Timur</p>
+                                    <p className="text-gray-700 font-medium">{profil?.batas_timur || '-'}</p>
+                                </div>
                             </div>
                         </div>
                     </section>
 
-                    {/* 4. PENDUDUK */}
+                    {/* 4. PENDUDUK & BOX TABEL KOSONG (USIA, AGAMA, PEKERJAAN) SIAP DIISI DARI PANEL ADMIN */}
                     <section id="penduduk" className="scroll-mt-28 space-y-10">
                         <div className="flex items-center gap-3 mb-8">
                             <span className="p-2.5 bg-green-100 text-green-700 rounded-xl text-xl">📊</span>
                             <h2 className="text-2xl md:text-3xl font-extrabold text-gray-900">Profil Kependudukan</h2>
                         </div>
+                        
+                        {/* Kartu Ringkasan Jiwa */}
                         <div className="grid grid-cols-2 md:grid-cols-4 gap-6 text-center mb-10">
                             <div className="bg-green-700 text-white rounded-3xl p-6 shadow-md">
                                 <p className="text-3xl font-extrabold">{formatAngka(laki + perempuan)}</p>
@@ -290,9 +327,102 @@ export default function ProfilDesa({ profil, perangkat, bpd, lkmd, tpk, pkk, rtr
                                 <p className="text-xs mt-1 uppercase tracking-wider font-bold opacity-90">Kepala Keluarga</p>
                             </div>
                         </div>
+
+                        {/* Box Tabel Dinamis (Struktur ada, tapi data MURNI KOSONG / Menunggu input dari Admin) */}
+                        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
+                            
+                            {/* Box Kelompok Usia */}
+                            <div className="bg-white rounded-3xl border border-gray-100 shadow-sm overflow-hidden flex flex-col">
+                                <div className="bg-gray-50/80 border-b border-gray-100 px-6 py-4">
+                                    <h3 className="font-bold text-gray-900 text-lg">Kelompok Usia</h3>
+                                </div>
+                                <div className="px-2 pb-2">
+                                    <table className="w-full text-sm text-left text-gray-600">
+                                        <thead className="text-xs text-gray-700 uppercase bg-gray-50">
+                                            <tr>
+                                                <th className="px-6 py-2.5">Kelompok Umur</th>
+                                                <th className="px-4 py-2.5 text-center">Laki-laki</th>
+                                                <th className="px-6 py-2.5 text-center">Perempuan</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody className="divide-y divide-gray-100">
+                                            {kelompokUmur.length > 0 ? (
+                                                kelompokUmur.map((item, index) => (
+                                                    <tr key={index} className="hover:bg-gray-50">
+                                                        <td className="px-6 py-2.5 font-medium text-gray-900">{item.rentang}</td>
+                                                        <td className="px-4 py-2.5 text-center">{item.laki}</td>
+                                                        <td className="px-6 py-2.5 text-center">{item.perempuan}</td>
+                                                    </tr>
+                                                ))
+                                            ) : (
+                                                <tr><td colSpan="3" className="px-6 py-6 text-center italic text-gray-400">Data belum tersedia (silakan isi dari panel admin).</td></tr>
+                                            )}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+
+                            <div className="flex flex-col gap-8 w-full">
+                                {/* Box Agama Penduduk */}
+                                <div className="bg-white rounded-3xl border border-gray-100 shadow-sm overflow-hidden">
+                                    <div className="bg-gray-50/80 border-b border-gray-100 px-6 py-4">
+                                        <h3 className="font-bold text-gray-900 text-lg">Agama Penduduk</h3>
+                                    </div>
+                                    <table className="w-full text-sm text-left text-gray-600">
+                                        <thead className="text-xs text-gray-700 uppercase bg-gray-50">
+                                            <tr>
+                                                <th className="px-6 py-2.5">Agama</th>
+                                                <th className="px-6 py-2.5 text-right">Jumlah</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody className="divide-y divide-gray-100">
+                                            {dataAgama.length > 0 ? (
+                                                dataAgama.map((item, index) => (
+                                                    <tr key={index} className="hover:bg-gray-50">
+                                                        <td className="px-6 py-2.5 font-medium text-gray-900">{item.nama}</td>
+                                                        <td className="px-6 py-2.5 text-right font-bold text-green-700">{formatAngka(item.jumlah)} Jiwa</td>
+                                                    </tr>
+                                                ))
+                                            ) : (
+                                                <tr><td colSpan="2" className="px-6 py-6 text-center italic text-gray-400">Data belum tersedia (silakan isi dari panel admin).</td></tr>
+                                            )}
+                                        </tbody>
+                                    </table>
+                                </div>
+
+                                {/* Box Mata Pencaharian / Pekerjaan */}
+                                <div className="bg-white rounded-3xl border border-gray-100 shadow-sm overflow-hidden flex flex-col">
+                                    <div className="bg-gray-50/80 border-b border-gray-100 px-6 py-4">
+                                        <h3 className="font-bold text-gray-900 text-lg">Mata Pencaharian</h3>
+                                    </div>
+                                    <div className="overflow-x-auto px-2 pb-2">
+                                        <table className="w-full text-sm text-left text-gray-600">
+                                            <thead className="text-xs text-gray-700 uppercase bg-gray-50">
+                                                <tr>
+                                                    <th className="px-6 py-2.5">Jenis Pekerjaan</th>
+                                                    <th className="px-6 py-2.5 text-right">Jumlah</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody className="divide-y divide-gray-100">
+                                                {dataPekerjaan.length > 0 ? (
+                                                    dataPekerjaan.map((item, index) => (
+                                                        <tr key={index} className="hover:bg-gray-50">
+                                                            <td className="px-6 py-2.5 font-medium text-gray-900">{item.nama}</td>
+                                                            <td className="px-6 py-2.5 text-right font-bold text-green-700">{formatAngka(item.jumlah)}</td>
+                                                        </tr>
+                                                    ))
+                                                ) : (
+                                                    <tr><td colSpan="2" className="px-6 py-6 text-center italic text-gray-400">Data belum tersedia (silakan isi dari panel admin).</td></tr>
+                                                )}
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </section>
 
-                    {/* 6. DUSUN */}
+                    {/* 5. DUSUN */}
                     <section id="dusun" className="scroll-mt-28">
                         <div className="flex items-center gap-3 mb-6">
                             <span className="p-2.5 bg-green-100 text-green-700 rounded-xl text-xl">🏘️</span>
