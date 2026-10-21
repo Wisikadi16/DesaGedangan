@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Head } from '@inertiajs/react';
 import PublicLayout from '@/Layouts/PublicLayout';
 import { formatAngka } from '@/utils/format';
+import { renderFormattedText } from '@/utils/textParser';
 
 export default function ProfilDesa({ profil, perangkat, bpd, lkmd, tpk, pkk, rtrw, dusun, auth }) {
     const namaDesa = profil?.nama_desa || 'Desa Gedangan';
@@ -73,9 +74,12 @@ export default function ProfilDesa({ profil, perangkat, bpd, lkmd, tpk, pkk, rtr
                                 <div>
                                     <span className="text-2xl mb-3 block">🚀</span>
                                     <h3 className="text-xl font-extrabold text-gray-900 mb-4">Misi</h3>
-                                    <div className="text-gray-700 whitespace-pre-line text-sm md:text-base leading-relaxed">
-                                        {profil?.misi || '-'}
+                                    
+                                    {/* Ubah baris ini untuk memanggil fungsi renderFormattedText */}
+                                    <div className="text-gray-700 text-sm md:text-base leading-relaxed">
+                                        {profil?.misi ? renderFormattedText(profil.misi) : '-'}
                                     </div>
+
                                 </div>
                             </div>
                         </div>
@@ -328,15 +332,15 @@ export default function ProfilDesa({ profil, perangkat, bpd, lkmd, tpk, pkk, rtr
                             </div>
                         </div>
 
-                        {/* Box Tabel Dinamis (Struktur ada, data murni kosong menunggu input admin) */}
+                        {/* Layout 2 Kolom Utama (Kiri: Usia, Kanan: Agama & Pekerjaan dengan Scroll) */}
                         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
                             
-                            {/* Box Kelompok Usia */}
-                            <div className="bg-white rounded-3xl border border-gray-100 shadow-sm overflow-hidden flex flex-col">
+                            {/* KOLOM KIRI: Kelompok Usia (Panjang ke bawah) */}
+                            <div className="bg-white rounded-3xl border border-gray-100 shadow-sm overflow-hidden flex flex-col h-full">
                                 <div className="bg-gray-50/80 border-b border-gray-100 px-6 py-4">
                                     <h3 className="font-bold text-gray-900 text-lg">Kelompok Usia</h3>
                                 </div>
-                                <div className="px-2 pb-2">
+                                <div className="p-2 flex-1">
                                     <table className="w-full text-sm text-left text-gray-600">
                                         <thead className="text-xs text-gray-700 uppercase bg-gray-50">
                                             <tr>
@@ -349,20 +353,22 @@ export default function ProfilDesa({ profil, perangkat, bpd, lkmd, tpk, pkk, rtr
                                             {kelompokUmur.length > 0 ? (
                                                 kelompokUmur.map((item, index) => (
                                                     <tr key={index} className="hover:bg-gray-50">
-                                                        <td className="px-6 py-2.5 font-medium text-gray-900">{item.rentang}</td>
-                                                        <td className="px-4 py-2.5 text-center">{item.laki}</td>
-                                                        <td className="px-6 py-2.5 text-center">{item.perempuan}</td>
+                                                        <td className="px-6 py-3 font-medium text-gray-900">{item.rentang}</td>
+                                                        <td className="px-4 py-3 text-center">{item.laki}</td>
+                                                        <td className="px-6 py-3 text-center">{item.perempuan}</td>
                                                     </tr>
                                                 ))
                                             ) : (
-                                                <tr><td colSpan="3" className="px-6 py-6 text-center italic text-gray-400">Data belum tersedia (silakan isi dari panel admin).</td></tr>
+                                                <tr><td colSpan="3" className="px-6 py-10 text-center italic text-gray-400">Data belum tersedia (silakan isi dari panel admin).</td></tr>
                                             )}
                                         </tbody>
                                     </table>
                                 </div>
                             </div>
 
+                            {/* KOLOM KANAN: Agama (Atas) & Mata Pencaharian dengan Scroll (Bawah) */}
                             <div className="flex flex-col gap-8 w-full">
+                                
                                 {/* Box Agama Penduduk */}
                                 <div className="bg-white rounded-3xl border border-gray-100 shadow-sm overflow-hidden">
                                     <div className="bg-gray-50/80 border-b border-gray-100 px-6 py-4">
@@ -379,8 +385,8 @@ export default function ProfilDesa({ profil, perangkat, bpd, lkmd, tpk, pkk, rtr
                                             {dataAgama.length > 0 ? (
                                                 dataAgama.map((item, index) => (
                                                     <tr key={index} className="hover:bg-gray-50">
-                                                        <td className="px-6 py-2.5 font-medium text-gray-900">{item.nama}</td>
-                                                        <td className="px-6 py-2.5 text-right font-bold text-green-700">{formatAngka(item.jumlah)} Jiwa</td>
+                                                        <td className="px-6 py-3 font-medium text-gray-900">{item.nama}</td>
+                                                        <td className="px-6 py-3 text-right font-bold text-green-700">{formatAngka(item.jumlah)} Jiwa</td>
                                                     </tr>
                                                 ))
                                             ) : (
@@ -390,25 +396,25 @@ export default function ProfilDesa({ profil, perangkat, bpd, lkmd, tpk, pkk, rtr
                                     </table>
                                 </div>
 
-                                {/* Box Mata Pencaharian / Pekerjaan */}
+                                {/* Box Mata Pencaharian / Pekerjaan (Dilengkapi Scroll ke Bawah) */}
                                 <div className="bg-white rounded-3xl border border-gray-100 shadow-sm overflow-hidden flex flex-col">
                                     <div className="bg-gray-50/80 border-b border-gray-100 px-6 py-4">
                                         <h3 className="font-bold text-gray-900 text-lg">Mata Pencaharian</h3>
                                     </div>
-                                    <div className="overflow-x-auto px-2 pb-2">
+                                    <div className="max-h-[480px] overflow-y-auto px-2 pb-2">
                                         <table className="w-full text-sm text-left text-gray-600">
-                                            <thead className="text-xs text-gray-700 uppercase bg-gray-50">
+                                            <thead className="text-xs text-gray-700 uppercase bg-gray-50 sticky top-0 z-10">
                                                 <tr>
-                                                    <th className="px-6 py-2.5">Jenis Pekerjaan</th>
-                                                    <th className="px-6 py-2.5 text-right">Jumlah</th>
+                                                    <th className="px-6 py-2.5 bg-gray-50">Jenis Pekerjaan</th>
+                                                    <th className="px-6 py-2.5 text-right bg-gray-50">Jumlah</th>
                                                 </tr>
                                             </thead>
                                             <tbody className="divide-y divide-gray-100">
                                                 {dataPekerjaan.length > 0 ? (
                                                     dataPekerjaan.map((item, index) => (
                                                         <tr key={index} className="hover:bg-gray-50">
-                                                            <td className="px-6 py-2.5 font-medium text-gray-900">{item.nama}</td>
-                                                            <td className="px-6 py-2.5 text-right font-bold text-green-700">{formatAngka(item.jumlah)}</td>
+                                                            <td className="px-6 py-3 font-medium text-gray-900">{item.nama}</td>
+                                                            <td className="px-6 py-3 text-right font-bold text-green-700">{formatAngka(item.jumlah)}</td>
                                                         </tr>
                                                     ))
                                                 ) : (
@@ -418,6 +424,7 @@ export default function ProfilDesa({ profil, perangkat, bpd, lkmd, tpk, pkk, rtr
                                         </table>
                                     </div>
                                 </div>
+
                             </div>
                         </div>
                     </section>

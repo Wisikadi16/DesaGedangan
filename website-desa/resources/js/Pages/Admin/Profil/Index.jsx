@@ -230,7 +230,7 @@ export default function Index({ auth, profil }) {
                                             <div key={index} className="flex gap-2 items-center bg-gray-50 p-2 rounded border">
                                                 <TextInput value={item.rentang} onChange={(e) => handleDynamicChange('kelompok_umur', index, 'rentang', e.target.value)} className="w-1/3 text-sm" placeholder="Usia (0-4)" />
                                                 <TextInput type="number" value={item.laki} onChange={(e) => handleDynamicChange('kelompok_umur', index, 'laki', e.target.value)} className="w-1/3 text-sm" placeholder="Laki" />
-                                                <TextInput type="number" value={item.perempuan} onChange={(e) => handleDynamicChange('kelomo_umur', index, 'perempuan', e.target.value)} className="w-1/3 text-sm" placeholder="Pr" />
+                                                <TextInput type="number" value={item.perempuan} onChange={(e) => handleDynamicChange('kelompok_umur', index, 'perempuan', e.target.value)} className="w-1/3 text-sm" placeholder="Pr" />
                                                 <button type="button" onClick={() => removeDynamicRow('kelompok_umur', index)} className="p-1 text-red-500 hover:bg-red-100 rounded font-bold">✖</button>
                                             </div>
                                         ))}

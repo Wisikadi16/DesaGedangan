@@ -2,16 +2,20 @@ import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import Field, { inputClass } from '@/Components/FormField';
 import { Head, Link, useForm } from '@inertiajs/react';
 
-// Satu form untuk Tambah (perangkat = null) dan Edit (perangkat = data yang ada)
-export default function Form({ perangkat }) {
+// Daftar kategori HARUS sama dengan yang ada di Index.jsx dan yang dibaca ProfilPublikController
+const DAFTAR_KATEGORI = ['Perangkat Desa', 'BPD', 'LKMD', 'TPK/KPMD', 'PKK', 'RT/RW', 'Ormas/Pemuda'];
+
+// Satu form untuk Tambah (perangkat = undefined) dan Edit (perangkat = data yang ada)
+export default function Form({ auth, perangkat, kategori_awal }) {
     const edit = !!perangkat;
 
     const { data, setData, post, processing, errors } = useForm({
+        kategori: perangkat?.kategori ?? kategori_awal ?? 'Perangkat Desa',
         nama: perangkat?.nama ?? '',
         jabatan: perangkat?.jabatan ?? '',
+        alamat: perangkat?.alamat ?? '',
         telepon: perangkat?.telepon ?? '',
         urutan: perangkat?.urutan ?? '',
-        deskripsi: perangkat?.deskripsi ?? '',
         foto: null,
         // Trik agar upload file tetap jalan saat Edit (Laravel menerima POST yang menyamar sebagai PUT)
         ...(edit ? { _method: 'put' } : {}),
@@ -23,13 +27,28 @@ export default function Form({ perangkat }) {
     };
 
     return (
-        <AuthenticatedLayout header={<h2 className="text-xl font-bold text-gray-800">{edit ? 'Edit Perangkat Desa' : 'Tambah Perangkat Desa'}</h2>}>
-            <Head title={edit ? 'Edit Perangkat Desa' : 'Tambah Perangkat Desa'} />
+        <AuthenticatedLayout
+            user={auth?.user}
+            header={<h2 className="text-xl font-bold text-gray-800">{edit ? 'Edit Data' : 'Tambah Data'}</h2>}
+        >
+            <Head title={edit ? 'Edit Data Pemerintahan' : 'Tambah Data Pemerintahan'} />
             <div className="py-12">
                 <div className="max-w-3xl mx-auto sm:px-6 lg:px-8">
                     <div className={`bg-white p-6 shadow-sm sm:rounded-lg border-t-4 ${edit ? 'border-yellow-500' : 'border-green-500'}`}>
                         <form onSubmit={submit} className="space-y-5">
-                            <Field label="Foto (Opsional)" error={errors.foto} hint={edit ? 'Kosongkan jika tidak ingin mengubah foto. ' + 'Disarankan foto potret (rasio 3:4), maks. 5 MB.' : 'Disarankan foto potret (rasio 3:4), maks. 5 MB.'}>
+                            <Field label="Kategori" error={errors.kategori}>
+                                <select value={data.kategori} onChange={(e) => setData('kategori', e.target.value)} className={inputClass}>
+                                    {DAFTAR_KATEGORI.map((k) => (
+                                        <option key={k} value={k}>{k}</option>
+                                    ))}
+                                </select>
+                            </Field>
+
+                            <Field
+                                label="Foto (Opsional)"
+                                error={errors.foto}
+                                hint={(edit ? 'Kosongkan jika tidak ingin mengubah foto. ' : '') + 'Disarankan foto potret (rasio 3:4), maks. 2 MB.'}
+                            >
                                 {perangkat?.foto && (
                                     <img src={`/storage/${perangkat.foto}`} alt={perangkat.nama} className="mb-3 h-40 w-32 object-cover rounded shadow" />
                                 )}
@@ -50,21 +69,21 @@ export default function Form({ perangkat }) {
                                 </Field>
                             </div>
 
+                            <Field label="Alamat / Dusun (Opsional)" error={errors.alamat}>
+                                <input type="text" value={data.alamat} onChange={(e) => setData('alamat', e.target.value)} className={inputClass} placeholder="Contoh: Dusun Jaten" />
+                            </Field>
+
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                <Field label="Telepon (Opsional)" error={errors.telepon} hint="Jika diisi, nomor ini tampil di halaman publik.">
+                                <Field label="Telepon (Opsional)" error={errors.telepon}>
                                     <input type="text" value={data.telepon} onChange={(e) => setData('telepon', e.target.value)} className={inputClass} />
                                 </Field>
-                                <Field label="Urutan Tampil" error={errors.urutan} hint="Angka kecil tampil lebih dulu. Kosongkan agar otomatis di paling akhir.">
+                                <Field label="Urutan Tampil" error={errors.urutan} hint="Angka kecil tampil lebih dulu.">
                                     <input type="number" min="0" value={data.urutan} onChange={(e) => setData('urutan', e.target.value)} className={inputClass} />
                                 </Field>
                             </div>
 
-                            <Field label="Keterangan Singkat (Opsional)" error={errors.deskripsi}>
-                                <textarea rows="3" value={data.deskripsi} onChange={(e) => setData('deskripsi', e.target.value)} className={inputClass} />
-                            </Field>
-
                             <div className="flex justify-end pt-4 border-t space-x-4">
-                                <Link href={route('admin.pemerintahan.index')} className="text-gray-500 px-4 py-2 hover:bg-gray-100 rounded">
+                                <Link href={route('admin.pemerintahan.index', { kategori: data.kategori })} className="text-gray-500 px-4 py-2 hover:bg-gray-100 rounded">
                                     Batal
                                 </Link>
                                 <button

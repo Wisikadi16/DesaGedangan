@@ -1,6 +1,7 @@
 import { Head } from '@inertiajs/react';
 import { useState } from 'react';
 import PublicLayout from '@/Layouts/PublicLayout';
+import { renderFormattedText } from '@/utils/textParser';
 
 export default function DesaWisata({ profil, auth, desaWisata }) {
     const namaDesa = profil?.nama_desa || 'Desa Gedangan';
@@ -11,9 +12,9 @@ export default function DesaWisata({ profil, auth, desaWisata }) {
         'KULINER NDESO', 'EVEN', 'INFO PAKET', 'POKDARWIS'
     ];
 
-    // Fungsi untuk memanggil isi tab sesuai yang diklik
-    const renderTabContent = () => {
-        if (!desaWisata) return "Data belum tersedia.";
+    // Fungsi untuk mengambil isi tab sesuai yang diklik
+    const getTabContent = () => {
+        if (!desaWisata) return null;
         
         switch (activeTab) {
             case 'VISI DAN MISI': return desaWisata.visi_misi;
@@ -23,9 +24,11 @@ export default function DesaWisata({ profil, auth, desaWisata }) {
             case 'EVEN': return desaWisata.even;
             case 'INFO PAKET': return desaWisata.info_paket;
             case 'POKDARWIS': return desaWisata.pokdarwis;
-            default: return "Data belum tersedia.";
+            default: return null;
         }
     };
+
+    const currentContent = getTabContent();
 
     return (
         <PublicLayout profil={profil} auth={auth}>
@@ -46,8 +49,8 @@ export default function DesaWisata({ profil, auth, desaWisata }) {
                 <div className="max-w-5xl mx-auto px-4 -mt-10 relative z-10 space-y-12">
                     
                     {/* ARTIKEL / PROFIL DESA WISATA (DARI DATABASE) */}
-                    <div className="bg-white rounded-3xl shadow-lg border border-gray-100 p-8 md:p-12 text-gray-700 leading-relaxed text-base md:text-lg whitespace-pre-line">
-                        {desaWisata?.narasi_utama ? desaWisata.narasi_utama : (
+                    <div className="bg-white rounded-3xl shadow-lg border border-gray-100 p-8 md:p-12 text-gray-700 leading-relaxed text-base md:text-lg">
+                        {desaWisata?.narasi_utama ? renderFormattedText(desaWisata.narasi_utama) : (
                             <p className="text-center italic text-gray-400">Narasi utama belum diisi oleh admin.</p>
                         )}
                     </div>
@@ -75,8 +78,8 @@ export default function DesaWisata({ profil, auth, desaWisata }) {
                             <h3 className="text-2xl font-extrabold text-gray-900 mb-6 border-b border-gray-100 pb-4 inline-block border-b-green-500">
                                 {activeTab}
                             </h3>
-                            <div className="text-gray-700 leading-relaxed whitespace-pre-line text-lg">
-                                {renderTabContent() || (
+                            <div className="text-gray-700 leading-relaxed text-lg">
+                                {currentContent ? renderFormattedText(currentContent) : (
                                     <div className="flex flex-col items-center justify-center py-12 space-y-4 bg-gray-50 rounded-2xl border border-dashed border-gray-200">
                                         <span className="text-5xl">🚧</span>
                                         <p className="text-center font-medium text-gray-500">

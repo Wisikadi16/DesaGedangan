@@ -17,7 +17,10 @@ class BukuTamuController extends Controller
                 'user' => $request->user(),
             ],
             'profil' => VillageProfile::first(),
-            'pesanTerbaru' => BukuTamu::latest()->get()
+            // AMAN: Nomor telepon pengunjung disaring agar tidak ikut bocor ke publik, dibatasi 20 pesan terbaru
+            'pesanTerbaru' => BukuTamu::latest()
+                ->take(20)
+                ->get(['id', 'nama', 'perihal', 'pesan', 'balasan', 'created_at'])
         ]);
     }
 
