@@ -34,6 +34,9 @@ class LayananSmardController extends Controller
                 Storage::disk('public')->delete($smard->gambar);
             }
             $data['gambar'] = $request->file('gambar')->store('smard', 'public');
+        } else {
+            // Jika tidak upload gambar baru, amankan gambar lama agar tidak tertimpa null
+            unset($data['gambar']);
         }
 
         $smard->fill($data)->save();

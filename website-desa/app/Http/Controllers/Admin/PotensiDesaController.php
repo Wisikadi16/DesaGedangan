@@ -57,6 +57,9 @@ class PotensiDesaController extends Controller
                 Storage::disk('public')->delete($potensi->gambar);
             }
             $data['gambar'] = $request->file('gambar')->store('potensi', 'public');
+        } else {
+            // Jika tidak upload gambar baru, amankan gambar lama agar tidak tertimpa null
+            unset($data['gambar']);
         }
 
         $potensi->update($data);

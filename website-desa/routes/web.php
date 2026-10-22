@@ -13,12 +13,13 @@ use App\Http\Controllers\Admin\DesaWisataController as AdminDesaWisataController
 use App\Http\Controllers\Admin\SyaratPelayananController as AdminSyaratPelayananController;
 use App\Http\Controllers\Admin\LayananSmardController as AdminLayananSmardController;
 use App\Http\Controllers\Admin\PotensiDesaController as AdminPotensiDesaController;
-use App\Http\Controllers\Admin\LembagaDesaController; // Import Controller Lembaga Desa Baru
+use App\Http\Controllers\Admin\LembagaDesaController; 
 use App\Models\News;
 use App\Models\VillageProfile;
 use App\Models\DesaWisata;
 use App\Models\SyaratPelayanan;
 use App\Models\LayananSmard;
+use App\Models\LembagaDesa; // <-- Tambahan Model Lembaga untuk halaman publik
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -33,13 +34,21 @@ Route::get('/', function () {
 // 2. HALAMAN PROFIL
 Route::get('/profil', [ProfilPublikController::class, 'index'])->name('profil.index');
 
-// 3. HALAMAN PUBLIK (Berita, UMKM, Desa Wisata, Syarat Pelayanan, Layanan SMARD, Transparansi)
+// 3. HALAMAN PUBLIK (Berita, UMKM, Desa Wisata, Syarat Pelayanan, Layanan SMARD, Transparansi, Lembaga)
 Route::get('/berita', [BeritaController::class, 'publicIndex'])->name('berita');
 Route::get('/berita/{id}', [BeritaController::class, 'show'])->whereNumber('id')->name('berita.show');
 Route::get('/umkm', [UmkmController::class, 'publicIndex'])->name('umkm.index');
 
 // Transparansi Publik
 Route::get('/transparansi', [TransparansiController::class, 'publicIndex'])->name('transparansi.index');
+
+// Lembaga Desa Publik (Baru ditambahkan agar data lembaga muncul di publik)
+Route::get('/lembaga', function () {
+    return Inertia::render('Lembaga', [
+        'profil' => VillageProfile::first(),
+        'lembagas' => LembagaDesa::all(),
+    ]);
+})->name('lembaga');
 
 Route::get('/desa-wisata', function () {
     return Inertia::render('DesaWisata', [
@@ -86,7 +95,7 @@ Route::get('/potensi/kesenian', function () {
 
 // Buku Tamu & Kontak (Publik)
 Route::get('/buku-tamu', [BukuTamuController::class, 'index'])->name('buku-tamu');
-Route::post('/buku-tamu', [BukuTamuController::class, 'store'])->name('buku-tamu.store');
+Route::post('/buku-tamu', [BukuTamuController::class, 'store'])->middleware('throttle:5,1');
 
 // 4. HALAMAN ADMIN
 Route::middleware(['auth', 'verified'])->prefix('admin')->name('admin.')->group(function () {
@@ -123,7 +132,7 @@ Route::middleware(['auth', 'verified'])->prefix('admin')->name('admin.')->group(
     Route::resource('/pemerintahan', PerangkatController::class)->except('show');
     Route::resource('/dusun', DusunController::class)->except('show');
 
-    // CRUD Lembaga Desa (Baru)
+    // CRUD Lembaga Desa
     Route::resource('/lembaga', LembagaDesaController::class)->except(['show']);
 });
 

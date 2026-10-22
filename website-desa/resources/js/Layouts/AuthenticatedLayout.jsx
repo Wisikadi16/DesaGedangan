@@ -28,13 +28,17 @@ export default function AuthenticatedLayout({ header, children }) {
     const [showingNavigationDropdown, setShowingNavigationDropdown] = useState(false);
 
     const [showFlash, setShowFlash] = useState(false);
+    
+    // Gabungkan pesan flash dari 'message' atau 'success'
+    const flashMessage = flash?.message || flash?.success;
+
     useEffect(() => {
-        if (flash?.message) {
+        if (flashMessage) {
             setShowFlash(true);
             const timer = setTimeout(() => setShowFlash(false), 4000);
             return () => clearTimeout(timer);
         }
-    }, [flash]);
+    }, [flashMessage]);
 
     return (
         <div className="min-h-screen bg-gray-100">
@@ -154,13 +158,13 @@ export default function AuthenticatedLayout({ header, children }) {
             </nav>
 
             {/* Notifikasi sukses */}
-            {showFlash && flash?.message && (
+            {showFlash && flashMessage && (
                 <div
                     role="status"
                     className="fixed top-20 right-4 z-50 max-w-sm bg-green-600 text-white px-5 py-3 rounded-lg shadow-xl flex items-start gap-3"
                 >
                     <span>✓</span>
-                    <span className="text-sm font-semibold">{flash.message}</span>
+                    <span className="text-sm font-semibold">{flashMessage}</span>
                     <button
                         type="button"
                         onClick={() => setShowFlash(false)}
