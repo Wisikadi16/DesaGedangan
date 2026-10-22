@@ -10,10 +10,11 @@ export default function PublicLayout({ children, profil }) {
             
             {/* Navbar Utama */}
             <nav className="bg-white shadow-md w-full fixed top-0 z-50 h-16">
-                <div className="w-full px-4 lg:px-8 flex justify-between items-center h-full">
+                {/* Diubah menggunakan max-w-7xl dan mx-auto agar posisinya pas di tengah dan tidak mentok */}
+                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex justify-between items-center h-full">
                     
                     {/* Logo */}
-                    <Link href={route('home')} className="font-extrabold text-xl lg:text-2xl text-green-700 tracking-wider z-50 shrink-0">
+                    <Link href={route('home')} className="font-extrabold text-lg sm:text-xl lg:text-2xl text-green-700 tracking-wider z-50 shrink-0 truncate max-w-[200px] sm:max-w-xs">
                         {profil?.nama_desa || 'DESA GEDANGAN'}
                     </Link>
 
@@ -49,7 +50,7 @@ export default function PublicLayout({ children, profil }) {
                                 </ul>
                             </li>
 
-                            {/* Dropdown Transparansi */}
+                            {/* Transparansi */}
                             <li className="h-full flex items-center">
                                 <Link href={route('transparansi.index')} className="hover:text-green-600 transition">Transparansi</Link>
                             </li>
@@ -64,7 +65,6 @@ export default function PublicLayout({ children, profil }) {
                             </li>
 
                             <li className="h-full flex items-center"><Link href={route('buku-tamu')} className="hover:text-green-600 transition">Buku Tamu</Link></li>
-                            {/*<li className="h-full flex items-center"><Link href={route('kontak')} className="hover:text-green-600 transition">Kontak</Link></li>*/}
                         </ul>
 
                         {/* Tombol Login / Panel Admin Desktop */}
@@ -79,7 +79,7 @@ export default function PublicLayout({ children, profil }) {
 
                     {/* --- TOMBOL HAMBURGER (MOBILE) --- */}
                     <div className="xl:hidden flex items-center z-50">
-                        <button onClick={() => setIsOpen(!isOpen)} className="text-gray-700 focus:outline-none p-2">
+                        <button onClick={() => setIsOpen(!isOpen)} className="text-gray-700 focus:outline-none p-2 rounded-lg hover:bg-gray-100">
                             <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 {isOpen ? (
                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
@@ -132,7 +132,6 @@ export default function PublicLayout({ children, profil }) {
                         </div>
 
                         <Link href={route('buku-tamu')} className="block py-2 text-gray-700 border-t border-gray-100" onClick={() => setIsOpen(false)}>Buku Tamu</Link>
-                         {/*<Link href={route('kontak')} className="block py-2 text-gray-700" onClick={() => setIsOpen(false)}>Kontak</Link>*/}
                         
                         <div className="pt-3 border-t border-gray-100 pb-4">
                             {auth?.user ? (

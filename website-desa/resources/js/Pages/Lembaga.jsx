@@ -17,7 +17,7 @@ export default function Lembaga({ profil, lembagas }) {
             <div className="bg-gray-50 text-gray-800 font-sans min-h-screen pb-16">
                 
                 {/* HERO BANNER */}
-                <div className="bg-gradient-to-r from-green-900 via-green-800 to-teal-800 text-white py-16 px-4 text-center">
+                <div className="bg-gradient-to-r from-green-900 via-green-800 to-teal-800 text-white py-16 px-4 text-center w-full">
                     <div className="max-w-4xl mx-auto space-y-4">
                         <span className="bg-green-700/65 text-green-200 border border-green-500/30 text-xs px-4 py-1.5 rounded-full font-bold uppercase tracking-widest inline-block backdrop-blur-sm">
                             Pemerintahan Desa
@@ -53,9 +53,9 @@ export default function Lembaga({ profil, lembagas }) {
                                 ))}
                             </div>
 
-                            {/* TABEL / DAFTAR PENGURUS */}
-                            <div className="bg-white rounded-3xl shadow-sm border border-gray-100 overflow-hidden p-6 md:p-8">
-                                <h3 className="text-xl font-bold text-gray-900 mb-6 pb-4 border-b border-gray-100 flex items-center justify-between">
+                            {/* KARTU / STRUKTUR PENGURUS */}
+                            <div className="bg-white rounded-3xl shadow-sm border border-gray-100 overflow-hidden p-6 md:p-8 w-full">
+                                <h3 className="text-xl font-bold text-gray-900 mb-6 pb-4 border-b border-gray-100 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2">
                                     <span>Struktur Pengurus: {activeTab}</span>
                                     <span className="text-xs font-normal text-gray-500 bg-gray-100 px-3 py-1 rounded-full">
                                         {filteredLembaga.length} Anggota
@@ -65,16 +65,16 @@ export default function Lembaga({ profil, lembagas }) {
                                 {filteredLembaga.length > 0 ? (
                                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
                                         {filteredLembaga.map((item) => (
-                                            <div key={item.id} className="bg-gray-50/70 p-5 rounded-2xl border border-gray-100 flex flex-col justify-between space-y-3">
+                                            <div key={item.id} className="bg-gray-50/70 p-5 rounded-2xl border border-gray-100 flex flex-col justify-between space-y-3 shadow-xs">
                                                 <div>
-                                                    <span className="text-xs font-bold text-green-700 uppercase tracking-wider bg-green-50 px-2.5 py-1 rounded-md inline-block mb-2">
+                                                    <span className="text-xs font-bold text-green-700 uppercase tracking-wider bg-green-50 border border-green-200/50 px-2.5 py-1 rounded-md inline-block mb-2">
                                                         {item.jabatan || 'Anggota'}
                                                     </span>
                                                     <h4 className="text-base font-bold text-gray-900">{item.nama}</h4>
                                                 </div>
                                                 {item.alamat_atau_keterangan && (
                                                     <p className="text-xs text-gray-500 pt-2 border-t border-gray-200/60">
-                                                        <span className="font-semibold text-gray-700">Keterangan:</span> {item.alamat_atau_keterangan}
+                                                        <span className="font-semibold text-gray-700">Alamat/Keterangan:</span> {item.alamat_atau_keterangan}
                                                     </p>
                                                 )}
                                             </div>
@@ -97,4 +97,4 @@ export default function Lembaga({ profil, lembagas }) {
             </div>
         </PublicLayout>
     );
-}
+}     
