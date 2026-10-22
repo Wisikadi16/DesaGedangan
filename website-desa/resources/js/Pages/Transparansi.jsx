@@ -1,7 +1,7 @@
 import { Head } from '@inertiajs/react';
 import PublicLayout from '@/Layouts/PublicLayout';
 
-export default function Transparansi({ profil, transparansi }) {
+export default function Transparansi({ profil, transparansis }) {
     return (
         <PublicLayout profil={profil}>
             <Head title="Transparansi Anggaran Desa" />
@@ -40,15 +40,19 @@ export default function Transparansi({ profil, transparansi }) {
                                     </tr>
                                 </thead>
                                 <tbody className="divide-y divide-gray-100 text-sm text-gray-700">
-                                    {transparansi && transparansi.length > 0 ? (
-                                        transparansi.map((item) => (
+                                    {transparansis && transparansis.length > 0 ? (
+                                        transparansis.map((item) => (
                                             <tr key={item.id} className="hover:bg-gray-50/80 transition">
                                                 <td className="p-4 font-semibold text-gray-900">{item.tahun || '-'}</td>
-                                                <td className="p-4">{item.judul}</td>
+                                                <td className="p-4">
+                                                    <div className="font-bold text-gray-900">{item.judul}</div>
+                                                    <div className="text-xs text-gray-500 mt-0.5">Kategori: <span className="text-green-700 font-semibold">{item.kategori}</span></div>
+                                                    {item.deskripsi && <p className="text-xs text-gray-600 mt-1">{item.deskripsi}</p>}
+                                                </td>
                                                 <td className="p-4 text-center">
-                                                    {item.file ? (
+                                                    {item.file_lampiran ? (
                                                         <a 
-                                                            href={`/storage/${item.file}`} 
+                                                            href={`/storage/${item.file_lampiran}`} 
                                                             target="_blank" 
                                                             rel="noopener noreferrer"
                                                             className="inline-flex items-center gap-1.5 bg-green-700 hover:bg-green-800 text-white px-4 py-2 rounded-xl text-xs font-bold transition shadow-sm"
